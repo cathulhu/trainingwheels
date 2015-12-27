@@ -47,11 +47,11 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/debtInput"
+        android:hint="Total Debt"
+        android:textAlignment="center"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/postButton"
-        android:layout_alignEnd="@+id/postButton"
-        android:hint="Total Debt"
-        android:textAlignment="center" />
+        android:layout_alignEnd="@+id/postButton" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -59,10 +59,13 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/incomeInput"
-        android:layout_below="@+id/debtInput"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="54dp"
         android:hint="Gross Income"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:layout_below="@+id/debtInput"
+        android:layout_alignRight="@+id/debtInput"
+        android:layout_alignEnd="@+id/debtInput"
+        android:layout_alignLeft="@+id/debtInput"
+        android:layout_alignStart="@+id/debtInput" />
 
 </RelativeLayout>

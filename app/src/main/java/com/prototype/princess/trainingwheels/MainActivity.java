@@ -3,6 +3,7 @@ package com.prototype.princess.trainingwheels;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,10 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -84,17 +89,15 @@ public class MainActivity extends AppCompatActivity {
                     .build();
 
             Response myResponse = null;
+
             try {
                 myResponse = myClient.newCall(myRequest).execute();
+                unDecodedresp = myResponse.body().string();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            try {
-                unDecodedresp = myResponse.body().string();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             Log.v(TAG, unDecodedresp);
 
             return null;
@@ -106,8 +109,29 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(resp);
             Toast.makeText(getApplicationContext(), "end invoke", Toast.LENGTH_LONG).show();
 
-            TextView respText = (TextView)findViewById(R.id.respText);
-            respText.setText("Data Received: " + unDecodedresp);
+            try {
+                JSONObject parsedResponce = new JSONObject(unDecodedresp);
+                JSONArray repayPlans = parsedResponce.getJSONArray("repaymentPlanTypes");
+
+
+                JSONObject individualPlans = repayPlans.getJSONObject(4);
+
+                String plantype = individualPlans.getString("repaymentPlan");
+                int loanTime = individualPlans.getInt("loanPeriod");
+                double initPayment = individualPlans.getInt("initialMonthlyPayment");
+                double finPayment = individualPlans.getInt("finalMonthlyPayment");
+                double forgiven = individualPlans.getInt("amountForgiven");
+                double sumInterest = individualPlans.getInt("totalInterestPaid");
+                double sumTotal = individualPlans.getInt("totalAmountPaid");
+
+                TextView respText = (TextView)findViewById(R.id.respText);
+                respText.setText("Data Received: \n" + "Repayment Type: " + plantype + "\nLoan Period (Months): " + loanTime + "\nInitial Payment Amount: $" + initPayment + "\nFinal Payment Amount: $" + finPayment + "\nAmount Forgiven: $" + forgiven + "\nTotal Interest Payed: $" + sumInterest + "\nTotal Sum Payed: $" + sumTotal);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
 
         }
 
