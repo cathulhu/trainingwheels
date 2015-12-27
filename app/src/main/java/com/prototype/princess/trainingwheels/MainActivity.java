@@ -109,24 +109,29 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(resp);
             Toast.makeText(getApplicationContext(), "end invoke", Toast.LENGTH_LONG).show();
 
+            TextView respText = (TextView) findViewById(R.id.respText);
+            respText.setText("");
+
             try {
                 JSONObject parsedResponce = new JSONObject(unDecodedresp);
                 JSONArray repayPlans = parsedResponce.getJSONArray("repaymentPlanTypes");
 
+                for (int i = 0; i < 8; i++) {
 
-                JSONObject individualPlans = repayPlans.getJSONObject(4);
+                    JSONObject individualPlans = repayPlans.getJSONObject(i);
 
-                String plantype = individualPlans.getString("repaymentPlan");
-                int loanTime = individualPlans.getInt("loanPeriod");
-                double initPayment = individualPlans.getInt("initialMonthlyPayment");
-                double finPayment = individualPlans.getInt("finalMonthlyPayment");
-                double forgiven = individualPlans.getInt("amountForgiven");
-                double sumInterest = individualPlans.getInt("totalInterestPaid");
-                double sumTotal = individualPlans.getInt("totalAmountPaid");
+                    String plantype = individualPlans.getString("repaymentPlan");
+                    int loanTime = individualPlans.getInt("loanPeriod");
+                    double initPayment = individualPlans.getInt("initialMonthlyPayment");
+                    double finPayment = individualPlans.getInt("finalMonthlyPayment");
+                    double forgiven = individualPlans.getInt("amountForgiven");
+                    double sumInterest = individualPlans.getInt("totalInterestPaid");
+                    double sumTotal = individualPlans.getInt("totalAmountPaid");
 
-                TextView respText = (TextView)findViewById(R.id.respText);
-                respText.setText("Data Received: \n" + "Repayment Type: " + plantype + "\nLoan Period (Months): " + loanTime + "\nInitial Payment Amount: $" + initPayment + "\nFinal Payment Amount: $" + finPayment + "\nAmount Forgiven: $" + forgiven + "\nTotal Interest Payed: $" + sumInterest + "\nTotal Sum Payed: $" + sumTotal);
 
+                    respText.append("Repayment Type: " + plantype + "\nLoan Period (Months): " + loanTime + "\nInitial Payment Amount: $" + initPayment + "\nFinal Payment Amount: $" + finPayment + "\nAmount Forgiven: $" + forgiven + "\nTotal Interest Payed: $" + sumInterest + "\nTotal Sum Payed: $" + sumTotal + "\n\n");
+
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
