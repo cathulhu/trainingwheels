@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         EditText debtInput = (EditText) findViewById(R.id.debtInput);
         String debtValue = debtInput.getText().toString();  //need to implement JSON parsing for this to be used
 
+        EditText aprInput = (EditText) findViewById(R.id.aprInput);
+        String aprValue = aprInput.getText().toString();
 
         @Override
         protected void onPreExecute() {
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                     c3.put("eligible", "true");
 
                     manualLoans.put("balance", debtValue);
-                    manualLoans.put("interestRate", "6.3");
+                    manualLoans.put("interestRate", aprValue);
                     manualLoans.put("loanDate", "undefined"); //not sure if these need to be here
                     manualLoans.put("servicer", "undefined");
                     manualLoans.put("firstDisbursementDate", null);

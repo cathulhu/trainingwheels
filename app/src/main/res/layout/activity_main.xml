@@ -50,8 +50,9 @@
         android:hint="Total Debt"
         android:textAlignment="center"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/postButton"
-        android:layout_alignEnd="@+id/postButton" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="26dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -59,13 +60,22 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/incomeInput"
-        android:layout_marginTop="54dp"
         android:hint="Gross Income"
         android:textAlignment="center"
         android:layout_below="@+id/debtInput"
-        android:layout_alignRight="@+id/debtInput"
-        android:layout_alignEnd="@+id/debtInput"
-        android:layout_alignLeft="@+id/debtInput"
-        android:layout_alignStart="@+id/debtInput" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/aprInput"
+        android:textAlignment="center"
+        android:layout_below="@+id/incomeInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="APR Percent" />
 
 </RelativeLayout>
