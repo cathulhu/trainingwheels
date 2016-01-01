@@ -71,7 +71,74 @@ public class MainActivity extends AppCompatActivity {
             String urlTarget = "https://studentloans.gov/myDirectLoan/mobile/repayment/computeRepaymentPlans.action";
 
             OkHttpClient myClient = new OkHttpClient();
-            String manuallyAddedLoans = "[{\"type\":{\"code\":\"D1\",\"name\":\"Direct Subsidized Loan\",\"category\":\"DIRECT_SUBSIDIZED\",\"eligibleRepaymentPrograms\":[{\"name\":\"SF\",\"eligible\":\"true\"},{\"name\":\"EF\",\"eligible\":\"true\"},{\"name\":\"RE\",\"eligible\":\"true\"},{\"name\":\"PA\",\"eligible\":\"true\"},{\"name\":\"IB\",\"eligible\":\"true\"},{\"name\":\"C3\",\"eligible\":\"true\"}]},\"balance\":\"54321\",\"interestRate\":\"6.6\",\"loanDate\":undefined,\"servicer\":undefined,\"firstDisbursementDate\":null,\"subsidyLossDate\":\"N/A\"}]";
+           // String manuallyAddedLoans = "[{\"type\":{\"code\":\"D1\",\"name\":\"Direct Subsidized Loan\",\"category\":\"DIRECT_SUBSIDIZED\",\"eligibleRepaymentPrograms\":[{\"name\":\"SF\",\"eligible\":\"true\"},{\"name\":\"EF\",\"eligible\":\"true\"},{\"name\":\"RE\",\"eligible\":\"true\"},{\"name\":\"PA\",\"eligible\":\"true\"},{\"name\":\"IB\",\"eligible\":\"true\"},{\"name\":\"C3\",\"eligible\":\"true\"}]},\"balance\":\"54321\",\"interestRate\":\"6.6\",\"loanDate\":undefined,\"servicer\":undefined,\"firstDisbursementDate\":null,\"subsidyLossDate\":\"N/A\"}]";
+            //beging build json array object
+            JSONArray masterContainerarray = new JSONArray();
+                JSONObject manualLoans =new JSONObject();
+                    JSONObject type = new JSONObject();
+                        JSONArray repaymentProgs = new JSONArray();
+            try{
+                masterContainerarray.put(manualLoans);
+                manualLoans.put("type", type);
+                type.put("code", "D1");
+                type.put("name", "Direct Subsidized Loan");
+                type.put("category", "DIRECT_SUBSIDIZED");
+
+                type.put("eligibleRepaymentPrograms", repaymentProgs);
+
+                JSONObject sf = new JSONObject();
+                repaymentProgs.put(sf);
+                JSONObject ef = new JSONObject();
+                repaymentProgs.put(ef);
+                JSONObject re = new JSONObject();
+                repaymentProgs.put(re);
+                JSONObject pa = new JSONObject();
+                repaymentProgs.put(pa);
+                JSONObject ib = new JSONObject();
+                repaymentProgs.put(ib);
+                JSONObject c3 = new JSONObject();
+                repaymentProgs.put(c3);
+
+                try {
+                    sf.put("name", "SF");
+                    sf.put("eligible", "true");
+
+                    ef.put("name", "EF");
+                    ef.put("eligible", "true");
+
+                    re.put("name", "RE");
+                    re.put("eligible", "true");
+
+                    pa.put("name", "PA");
+                    pa.put("eligible", "true");
+
+                    ib.put("name", "IB");
+                    ib.put("eligible", "true");
+
+                    c3.put("name", "C3");
+                    c3.put("eligible", "true");
+
+                    manualLoans.put("balance", debtValue);
+                    manualLoans.put("interestRate", "6.3");
+                    manualLoans.put("loanDate", "undefined"); //not sure if these need to be here
+                    manualLoans.put("servicer", "undefined");
+                    manualLoans.put("firstDisbursementDate", null);
+                    manualLoans.put("subsidyLossDate", "N/A");
+
+                }
+                catch (JSONException e) {
+
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            String jsonPayload = new String();
+            jsonPayload = masterContainerarray.toString();
+            jsonPayload = jsonPayload.replace("N\\/A", "N/A");
+
+            //end build json array object
 
             RequestBody myForm = new FormEncodingBuilder()
                     .add("isMarried", "false")
@@ -79,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     .add("grossIncome", incomeValue)
                     .add("spouseGrossIncome", "0")
                     .add("familySize", "1")
-                    .add("manuallyAddedLoans", manuallyAddedLoans)
+                    .add("manuallyAddedLoans", jsonPayload)
                     .add("spouseLoans", "[]")
                     .build();
 
@@ -116,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject parsedResponce = new JSONObject(unDecodedresp);
                 JSONArray repayPlans = parsedResponce.getJSONArray("repaymentPlanTypes");
 
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < 9; i++) {
 
                     JSONObject individualPlans = repayPlans.getJSONObject(i);
 
@@ -127,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                     double forgiven = individualPlans.getInt("amountForgiven");
                     double sumInterest = individualPlans.getInt("totalInterestPaid");
                     double sumTotal = individualPlans.getInt("totalAmountPaid");
-
+                    //later I might want to see if I need to use the includesExtended, has BothLoanTypes, and hasConsolLoansOnly bools from post Response.
 
                     respText.append("Repayment Type: " + plantype + "\nLoan Period (Months): " + loanTime + "\nInitial Payment Amount: $" + initPayment + "\nFinal Payment Amount: $" + finPayment + "\nAmount Forgiven: $" + forgiven + "\nTotal Interest Payed: $" + sumInterest + "\nTotal Sum Payed: $" + sumTotal + "\n\n");
 
