@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -34,7 +38,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        final NumberPicker loanNumber1 = (NumberPicker)findViewById(R.id.loanPicker1);
+        final NumberPicker loanNumber2 = (NumberPicker)findViewById(R.id.loanPicker2);
+        final RadioGroup taxInput = (RadioGroup) findViewById(R.id.taxInput);
+        final RadioButton singleRadio = (RadioButton) findViewById(R.id.singleRadio);
+        final RadioButton headRadio = (RadioButton) findViewById(R.id.headRadio);
+        final TextView textView4 = (TextView) findViewById(R.id.textView4);
         Button postButton = (Button) findViewById(R.id.postButton);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +52,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        loanNumber1.setMaxValue(10);
+        loanNumber1.setMinValue(1);
+        loanNumber1.setWrapSelectorWheel(false);
+
+        textView4.setVisibility(View.INVISIBLE);
+        loanNumber2.setVisibility(View.INVISIBLE);
+        loanNumber2.setMaxValue(10);
+        loanNumber2.setMinValue(0);
+        loanNumber2.setWrapSelectorWheel(false);
+
+        taxInput.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                //NumberPicker loanNumber2 = (NumberPicker)findViewById(R.id.loanPicker2);
+                if(singleRadio.isChecked()||headRadio.isChecked())
+                {
+                    textView4.setVisibility(View.INVISIBLE);
+                    loanNumber2.setVisibility(View.INVISIBLE);
+                    loanNumber2.setValue(0);
+                }
+                else {
+                    textView4.setVisibility(View.VISIBLE);
+                    loanNumber2.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
+
+
 
 
 
@@ -71,10 +108,8 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {     // Runs in background thread
 
             String urlTarget = "https://studentloans.gov/myDirectLoan/mobile/repayment/computeRepaymentPlans.action";
-
             OkHttpClient myClient = new OkHttpClient();
-           // String manuallyAddedLoans = "[{\"type\":{\"code\":\"D1\",\"name\":\"Direct Subsidized Loan\",\"category\":\"DIRECT_SUBSIDIZED\",\"eligibleRepaymentPrograms\":[{\"name\":\"SF\",\"eligible\":\"true\"},{\"name\":\"EF\",\"eligible\":\"true\"},{\"name\":\"RE\",\"eligible\":\"true\"},{\"name\":\"PA\",\"eligible\":\"true\"},{\"name\":\"IB\",\"eligible\":\"true\"},{\"name\":\"C3\",\"eligible\":\"true\"}]},\"balance\":\"54321\",\"interestRate\":\"6.6\",\"loanDate\":undefined,\"servicer\":undefined,\"firstDisbursementDate\":null,\"subsidyLossDate\":\"N/A\"}]";
-            //beging build json array object
+
             JSONArray masterContainerarray = new JSONArray();
                 JSONObject manualLoans =new JSONObject();
                     JSONObject type = new JSONObject();
@@ -204,7 +239,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
 
 
         }
