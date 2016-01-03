@@ -32,6 +32,7 @@ import java.net.URLDecoder;
 
 public class MainActivity extends AppCompatActivity {
 
+    boolean isMarried;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         final RadioButton headRadio = (RadioButton) findViewById(R.id.headRadio);
         final TextView textView4 = (TextView) findViewById(R.id.textView4);
         Button postButton = (Button) findViewById(R.id.postButton);
+
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,16 +67,17 @@ public class MainActivity extends AppCompatActivity {
         taxInput.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                //NumberPicker loanNumber2 = (NumberPicker)findViewById(R.id.loanPicker2);
                 if(singleRadio.isChecked()||headRadio.isChecked())
                 {
                     textView4.setVisibility(View.INVISIBLE);
                     loanNumber2.setVisibility(View.INVISIBLE);
                     loanNumber2.setValue(0);
+                    isMarried=false;
                 }
                 else {
                     textView4.setVisibility(View.VISIBLE);
                     loanNumber2.setVisibility(View.VISIBLE);
+                    isMarried=true;
                 }
             }
         });
@@ -98,6 +101,13 @@ public class MainActivity extends AppCompatActivity {
         EditText aprInput = (EditText) findViewById(R.id.aprInput);
         String aprValue = aprInput.getText().toString();
 
+        final NumberPicker loanNumber1 = (NumberPicker)findViewById(R.id.loanPicker1);
+        final NumberPicker loanNumber2 = (NumberPicker)findViewById(R.id.loanPicker2);
+        int singleLoannum = loanNumber1.getValue();
+        int spouseLoannum = loanNumber2.getValue();
+
+        String married = String.valueOf(isMarried);
+
         @Override
         protected void onPreExecute() {
             Toast.makeText(getApplicationContext(), "post invoke", Toast.LENGTH_LONG).show();
@@ -110,81 +120,143 @@ public class MainActivity extends AppCompatActivity {
             String urlTarget = "https://studentloans.gov/myDirectLoan/mobile/repayment/computeRepaymentPlans.action";
             OkHttpClient myClient = new OkHttpClient();
 
-            JSONArray masterContainerarray = new JSONArray();
-                JSONObject manualLoans =new JSONObject();
+
+
+            JSONArray masterSingleContainer = new JSONArray();
+            JSONArray masterSpouseContainer = new JSONArray();
+                JSONObject manualLoans =new JSONObject();   //one manualLoans object per single loan
+                JSONObject spouseLoans =new JSONObject();   //one manualLoans object per spouse loan
                     JSONObject type = new JSONObject();
                         JSONArray repaymentProgs = new JSONArray();
-            try{
-                masterContainerarray.put(manualLoans);
-                manualLoans.put("type", type);
-                type.put("code", "D1");
-                type.put("name", "Direct Subsidized Loan");
-                type.put("category", "DIRECT_SUBSIDIZED");
 
-                type.put("eligibleRepaymentPrograms", repaymentProgs);
+                            JSONObject sf = new JSONObject();
+                            repaymentProgs.put(sf);
+                            JSONObject ef = new JSONObject();
+                            repaymentProgs.put(ef);
+                            JSONObject re = new JSONObject();
+                            repaymentProgs.put(re);
+                            JSONObject pa = new JSONObject();
+                            repaymentProgs.put(pa);
+                            JSONObject ib = new JSONObject();
+                            repaymentProgs.put(ib);
+                            JSONObject c3 = new JSONObject();
+                            repaymentProgs.put(c3);
 
-                JSONObject sf = new JSONObject();
-                repaymentProgs.put(sf);
-                JSONObject ef = new JSONObject();
-                repaymentProgs.put(ef);
-                JSONObject re = new JSONObject();
-                repaymentProgs.put(re);
-                JSONObject pa = new JSONObject();
-                repaymentProgs.put(pa);
-                JSONObject ib = new JSONObject();
-                repaymentProgs.put(ib);
-                JSONObject c3 = new JSONObject();
-                repaymentProgs.put(c3);
+            for (int i = 0; i < singleLoannum; i++) {
 
-                try {
-                    sf.put("name", "SF");
-                    sf.put("eligible", "true");
+                try{
+                    masterSingleContainer.put(manualLoans);
+                    manualLoans.put("type", type);
 
-                    ef.put("name", "EF");
-                    ef.put("eligible", "true");
+                    type.put("code", "D1");
+                    type.put("name", "Direct Subsidized Loan");
+                    type.put("category", "DIRECT_SUBSIDIZED");
 
-                    re.put("name", "RE");
-                    re.put("eligible", "true");
+                    type.put("eligibleRepaymentPrograms", repaymentProgs);
 
-                    pa.put("name", "PA");
-                    pa.put("eligible", "true");
+                    try {
+                        sf.put("name", "SF");
+                        sf.put("eligible", "true");
 
-                    ib.put("name", "IB");
-                    ib.put("eligible", "true");
+                        ef.put("name", "EF");
+                        ef.put("eligible", "true");
 
-                    c3.put("name", "C3");
-                    c3.put("eligible", "true");
+                        re.put("name", "RE");
+                        re.put("eligible", "true");
 
-                    manualLoans.put("balance", debtValue);
-                    manualLoans.put("interestRate", aprValue);
-                    manualLoans.put("loanDate", "undefined"); //not sure if these need to be here
-                    manualLoans.put("servicer", "undefined");
-                    manualLoans.put("firstDisbursementDate", null);
-                    manualLoans.put("subsidyLossDate", "N/A");
+                        pa.put("name", "PA");
+                        pa.put("eligible", "true");
 
+                        ib.put("name", "IB");
+                        ib.put("eligible", "true");
+
+                        c3.put("name", "C3");
+                        c3.put("eligible", "true");
+
+                        manualLoans.put("balance", debtValue);
+                        manualLoans.put("interestRate", aprValue);
+                        manualLoans.put("loanDate", "undefined"); //not sure if these need to be here
+                        manualLoans.put("servicer", "undefined");
+                        manualLoans.put("firstDisbursementDate", null);
+                        manualLoans.put("subsidyLossDate", "N/A");
+                    }
+                    catch (JSONException e) {
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                catch (JSONException e) {
 
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
 
-            String jsonPayload = new String();
-            jsonPayload = masterContainerarray.toString();
-            jsonPayload = jsonPayload.replace("N\\/A", "N/A");
+            if (spouseLoannum > 0);
+            {
+                for (int i = 0; i < spouseLoannum; i++) {
+
+                    try{
+                        spouseLoans.put("type", type);
+                        type.put("code", "D1");
+                        type.put("name", "Direct Subsidized Loan");
+                        type.put("category", "DIRECT_SUBSIDIZED");
+
+                        type.put("eligibleRepaymentPrograms", repaymentProgs);
+
+                        try {
+                            sf.put("name", "SF");
+                            sf.put("eligible", "true");
+
+                            ef.put("name", "EF");
+                            ef.put("eligible", "true");
+
+                            re.put("name", "RE");
+                            re.put("eligible", "true");
+
+                            pa.put("name", "PA");
+                            pa.put("eligible", "true");
+
+                            ib.put("name", "IB");
+                            ib.put("eligible", "true");
+
+                            c3.put("name", "C3");
+                            c3.put("eligible", "true");
+
+                            spouseLoans.put("balance", debtValue);
+                            spouseLoans.put("interestRate", aprValue);
+                            spouseLoans.put("loanDate", "undefined"); //not sure if these need to be here
+                            spouseLoans.put("servicer", "undefined");
+                            spouseLoans.put("firstDisbursementDate", null);
+                            spouseLoans.put("subsidyLossDate", "N/A");
+
+                            masterSpouseContainer.put(spouseLoans);
+                        }
+                        catch (JSONException e) {
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+
+            String jsonSinglePayload = masterSingleContainer.toString();
+            String jsonSpousePayload = masterSpouseContainer.toString();
+            jsonSinglePayload = jsonSinglePayload.replace("N\\/A", "N/A");
+            jsonSpousePayload = jsonSpousePayload.replace("N\\/A", "N/A");
 
             //end build json array object
 
             RequestBody myForm = new FormEncodingBuilder()
-                    .add("isMarried", "false")
+                    .add("isMarried", married)
                     .add("stateCode", "OR")
                     .add("grossIncome", incomeValue)
                     .add("spouseGrossIncome", "0")
                     .add("familySize", "1")
-                    .add("manuallyAddedLoans", jsonPayload)
-                    .add("spouseLoans", "[]")
+                    .add("manuallyAddedLoans", jsonSinglePayload)
+                    .add("spouseLoans", jsonSpousePayload)
                     .build();
 
             Request myRequest = new Request.Builder()
