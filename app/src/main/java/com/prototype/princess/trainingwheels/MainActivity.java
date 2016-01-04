@@ -1,14 +1,18 @@
 package com.prototype.princess.trainingwheels;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -33,14 +37,21 @@ import java.net.URLDecoder;
 public class MainActivity extends AppCompatActivity {
 
     boolean isMarried;
+    String[] loantypes = {"Direct Subsidized Loan", "Direct Unsubsidized Loan",
+            "Subsidized Federal Stafford Loan", "Unsubsidized Federal Stafford Loan",
+            "Direct Subsidized Consolidation Loan", "Direct Unsubsidized Consolidation Loan",
+            "FFEL Consolidation Loan", "Direct PLUS Loan for Graduate/Professional Students",
+            "FFEL PLUS Loan for Graduate/Professional Students", "Direct PLUS Loan for Parents",
+            "FFEL PLUS Loan for Parents", "Direct PLUS Consolidation Loan", "Federal Perkins Loan",
+            "Private Loan"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final NumberPicker loanNumber1 = (NumberPicker)findViewById(R.id.loanPicker1);
-        final NumberPicker loanNumber2 = (NumberPicker)findViewById(R.id.loanPicker2);
+        final NumberPicker loanNumber1 = (NumberPicker) findViewById(R.id.loanPicker1);
+        final NumberPicker loanNumber2 = (NumberPicker) findViewById(R.id.loanPicker2);
         final RadioGroup taxInput = (RadioGroup) findViewById(R.id.taxInput);
         final RadioButton singleRadio = (RadioButton) findViewById(R.id.singleRadio);
         final RadioButton headRadio = (RadioButton) findViewById(R.id.headRadio);
@@ -67,27 +78,41 @@ public class MainActivity extends AppCompatActivity {
         taxInput.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(singleRadio.isChecked()||headRadio.isChecked())
-                {
+                if (singleRadio.isChecked() || headRadio.isChecked()) {
                     textView4.setVisibility(View.INVISIBLE);
                     loanNumber2.setVisibility(View.INVISIBLE);
                     loanNumber2.setValue(0);
-                    isMarried=false;
-                }
-                else {
+                    isMarried = false;
+                } else {
                     textView4.setVisibility(View.VISIBLE);
                     loanNumber2.setVisibility(View.VISIBLE);
-                    isMarried=true;
+                    isMarried = true;
                 }
             }
         });
+
+
+        Button loanSelectbutton = (Button) findViewById(R.id.loanSelectbutton);
+        loanSelectbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder mybuilder = new AlertDialog.Builder(MainActivity.this);
+                mybuilder.setTitle("Select Loan Type");
+                mybuilder.setItems(loantypes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //stuff to happen when items selected
+                    }
+                });
+                AlertDialog loanDialog = mybuilder.create();
+                loanDialog.show();
+            }
+        });
+
     }
 
 
-
-
-
-    public class MyAsyncTask extends AsyncTask <String, String, String> {
+    public class MyAsyncTask extends AsyncTask<String, String, String> {
 
         private static final String TAG = "";
         String unDecodedresp;
@@ -101,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
         EditText aprInput = (EditText) findViewById(R.id.aprInput);
         String aprValue = aprInput.getText().toString();
 
-        final NumberPicker loanNumber1 = (NumberPicker)findViewById(R.id.loanPicker1);
-        final NumberPicker loanNumber2 = (NumberPicker)findViewById(R.id.loanPicker2);
+        final NumberPicker loanNumber1 = (NumberPicker) findViewById(R.id.loanPicker1);
+        final NumberPicker loanNumber2 = (NumberPicker) findViewById(R.id.loanPicker2);
         int singleLoannum = loanNumber1.getValue();
         int spouseLoannum = loanNumber2.getValue();
 
@@ -118,33 +143,33 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {     // Runs in background thread
 
             String urlTarget = "https://studentloans.gov/myDirectLoan/mobile/repayment/computeRepaymentPlans.action";
+
+
             OkHttpClient myClient = new OkHttpClient();
-
-
 
             JSONArray masterSingleContainer = new JSONArray();
             JSONArray masterSpouseContainer = new JSONArray();
-                JSONObject manualLoans =new JSONObject();   //one manualLoans object per single loan
-                JSONObject spouseLoans =new JSONObject();   //one manualLoans object per spouse loan
-                    JSONObject type = new JSONObject();
-                        JSONArray repaymentProgs = new JSONArray();
+            JSONObject manualLoans = new JSONObject();   //one manualLoans object per single loan
+            JSONObject spouseLoans = new JSONObject();   //one manualLoans object per spouse loan
+            JSONObject type = new JSONObject();
+            JSONArray repaymentProgs = new JSONArray();
 
-                            JSONObject sf = new JSONObject();
-                            repaymentProgs.put(sf);
-                            JSONObject ef = new JSONObject();
-                            repaymentProgs.put(ef);
-                            JSONObject re = new JSONObject();
-                            repaymentProgs.put(re);
-                            JSONObject pa = new JSONObject();
-                            repaymentProgs.put(pa);
-                            JSONObject ib = new JSONObject();
-                            repaymentProgs.put(ib);
-                            JSONObject c3 = new JSONObject();
-                            repaymentProgs.put(c3);
+            JSONObject sf = new JSONObject();
+            repaymentProgs.put(sf);
+            JSONObject ef = new JSONObject();
+            repaymentProgs.put(ef);
+            JSONObject re = new JSONObject();
+            repaymentProgs.put(re);
+            JSONObject pa = new JSONObject();
+            repaymentProgs.put(pa);
+            JSONObject ib = new JSONObject();
+            repaymentProgs.put(ib);
+            JSONObject c3 = new JSONObject();
+            repaymentProgs.put(c3);
 
             for (int i = 0; i < singleLoannum; i++) {
 
-                try{
+                try {
                     masterSingleContainer.put(manualLoans);
                     manualLoans.put("type", type);
 
@@ -179,8 +204,7 @@ public class MainActivity extends AppCompatActivity {
                         manualLoans.put("servicer", "undefined");
                         manualLoans.put("firstDisbursementDate", null);
                         manualLoans.put("subsidyLossDate", "N/A");
-                    }
-                    catch (JSONException e) {
+                    } catch (JSONException e) {
 
                     }
 
@@ -190,11 +214,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-            if (spouseLoannum > 0);
+            if (spouseLoannum > 0) ;
             {
                 for (int i = 0; i < spouseLoannum; i++) {
 
-                    try{
+                    try {
                         spouseLoans.put("type", type);
                         type.put("code", "D1");
                         type.put("name", "Direct Subsidized Loan");
@@ -229,8 +253,7 @@ public class MainActivity extends AppCompatActivity {
                             spouseLoans.put("subsidyLossDate", "N/A");
 
                             masterSpouseContainer.put(spouseLoans);
-                        }
-                        catch (JSONException e) {
+                        } catch (JSONException e) {
 
                         }
 
@@ -283,7 +306,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onPostExecute(String resp) {
             super.onPostExecute(resp);
-            Toast.makeText(getApplicationContext(), "end invoke", Toast.LENGTH_LONG).show();
 
             TextView respText = (TextView) findViewById(R.id.respText);
             respText.setText("");
