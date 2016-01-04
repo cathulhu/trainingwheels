@@ -37,13 +37,48 @@ import java.net.URLDecoder;
 public class MainActivity extends AppCompatActivity {
 
     boolean isMarried;
-    String[] loantypes = {"Direct Subsidized Loan", "Direct Unsubsidized Loan",
-            "Subsidized Federal Stafford Loan", "Unsubsidized Federal Stafford Loan",
-            "Direct Subsidized Consolidation Loan", "Direct Unsubsidized Consolidation Loan",
-            "FFEL Consolidation Loan", "Direct PLUS Loan for Graduate/Professional Students",
-            "FFEL PLUS Loan for Graduate/Professional Students", "Direct PLUS Loan for Parents",
-            "FFEL PLUS Loan for Parents", "Direct PLUS Consolidation Loan", "Federal Perkins Loan",
-            "Private Loan"};
+    String[] loantypes =
+            {       "Direct Subsidized Loan",
+                    "Direct Unsubsidized Loan",
+                    "Subsidized Federal Stafford Loan",
+                    "Unsubsidized Federal Stafford Loan",
+                    "Direct Subsidized Consolidation Loan",//
+                    "Direct Unsubsidized Consolidation Loan",
+                    "FFEL Consolidation Loan",//***
+                    "Direct PLUS Loan for Graduate/Professional Students",//
+                    "FFEL PLUS Loan for Graduate/Professional Students",//
+                    "Direct PLUS Loan for Parents",//
+                    "FFEL PLUS Loan for Parents",//
+                    "Direct PLUS Consolidation Loan",//
+                    "Federal Perkins Loan",
+                    "Private Loan"};
+    String[] loanCategory =
+            {
+                    "DIRECT_SUBSIDIZED",
+                    "DIRECT_UNSUBSIDIZED",
+                    "FFEL_SUBSIDIZED",
+                    "FFEL_UNSUBSIDIZED",
+                    "DIRECT_SUBSIDIZED",
+                    "DIRECT_UNSUBSIDIZED",
+                    "FFEL_UNSUBSIDIZED",
+                    "DIRECT_PLUS",
+                    "FFEL_PLUS",
+                    "DIRECT_PLUS",
+                    "FFEL_PLUS",
+                    "DIRECT_PLUS",
+                    "PERKINS",
+                    "ADDITIONAL"
+            };
+
+    String[] loanCodes = {"D1", "D2", "SF", "SU","D6","D5", "CL", "D3", "GB", "D4", "PL", "D7", "PU", "PV"};
+    int loanChoice;
+
+    String[] stateList = {"AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU", "HI",
+            "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MH", "MI", "MN", "MO", "MS", "MT",
+            "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "PW", "RI", "SC",
+            "SD", "TN", "TX", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY"};
+
+    int stateChoice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,21 +131,37 @@ public class MainActivity extends AppCompatActivity {
         loanSelectbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder mybuilder = new AlertDialog.Builder(MainActivity.this);
-                mybuilder.setTitle("Select Loan Type");
-                mybuilder.setItems(loantypes, new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+                builder1.setTitle("Select Loan Type");
+                builder1.setItems(loantypes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //stuff to happen when items selected
+                        loanChoice=which;
                     }
                 });
-                AlertDialog loanDialog = mybuilder.create();
+                AlertDialog loanDialog = builder1.create();
+                loanDialog.show();
+            }
+        });
+
+        Button stateButton = (Button) findViewById(R.id.stateButton);
+        stateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(MainActivity.this);
+                builder2.setTitle("Select Your Tax Filing State");
+                builder2.setItems(stateList, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        stateChoice=which;
+                    }
+                });
+                AlertDialog loanDialog = builder2.create();
                 loanDialog.show();
             }
         });
 
     }
-
 
     public class MyAsyncTask extends AsyncTask<String, String, String> {
 
@@ -119,6 +170,9 @@ public class MainActivity extends AppCompatActivity {
 
         EditText incomeInput = (EditText) findViewById(R.id.incomeInput);
         String incomeValue = incomeInput.getText().toString();
+
+        EditText spouseIncomeInput = (EditText) findViewById(R.id.spouseIncomeInput);
+        String spouseIncomeValue = spouseIncomeInput.getText().toString();
 
         EditText debtInput = (EditText) findViewById(R.id.debtInput);
         String debtValue = debtInput.getText().toString();  //need to implement JSON parsing for this to be used
@@ -173,9 +227,9 @@ public class MainActivity extends AppCompatActivity {
                     masterSingleContainer.put(manualLoans);
                     manualLoans.put("type", type);
 
-                    type.put("code", "D1");
-                    type.put("name", "Direct Subsidized Loan");
-                    type.put("category", "DIRECT_SUBSIDIZED");
+                    type.put("code", loanCodes[loanChoice]);
+                    type.put("name", loantypes[loanChoice]);
+                    type.put("category", loanCategory[loanChoice]);
 
                     type.put("eligibleRepaymentPrograms", repaymentProgs);
 
@@ -274,13 +328,16 @@ public class MainActivity extends AppCompatActivity {
 
             RequestBody myForm = new FormEncodingBuilder()
                     .add("isMarried", married)
-                    .add("stateCode", "OR")
+                    .add("stateCode", stateList[stateChoice])
                     .add("grossIncome", incomeValue)
-                    .add("spouseGrossIncome", "0")
-                    .add("familySize", "1")
+                    .add("spouseGrossIncome", spouseIncomeValue)
+                    .add("familySize", "1") //not wired up yet
                     .add("manuallyAddedLoans", jsonSinglePayload)
                     .add("spouseLoans", jsonSpousePayload)
                     .build();
+
+            Log.v("FormContents!", myForm.toString());
+
 
             Request myRequest = new Request.Builder()
                     .url(urlTarget)

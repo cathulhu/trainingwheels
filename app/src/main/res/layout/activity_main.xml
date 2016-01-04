@@ -199,8 +199,8 @@
         android:layout_column="3"
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/aprInput"
-        android:layout_alignLeft="@+id/aprInput"
-        android:layout_alignStart="@+id/aprInput" />
+        android:layout_toRightOf="@+id/scrollView2"
+        android:layout_toEndOf="@+id/scrollView2" />
 
     <ScrollView
         android:layout_width="wrap_content"
@@ -208,9 +208,12 @@
         android:id="@+id/scrollView2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/debtInput"
         android:layout_toStartOf="@+id/debtInput"
-        android:layout_alignTop="@+id/debtInput" >
+        android:layout_alignTop="@+id/debtInput"
+        android:layout_alignBottom="@+id/loanSelectbutton"
+        android:layout_alignRight="@+id/taxInput"
+        android:layout_alignEnd="@+id/taxInput"
+        android:layout_toLeftOf="@+id/debtInput">
 
         <TextView
             android:layout_width="match_parent"
@@ -228,5 +231,15 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="State"
+        android:id="@+id/stateButton"
+        android:layout_below="@+id/aprInput"
+        android:layout_toRightOf="@+id/loanSelectbutton"
+        android:layout_toEndOf="@+id/loanSelectbutton" />
 
 </RelativeLayout>
