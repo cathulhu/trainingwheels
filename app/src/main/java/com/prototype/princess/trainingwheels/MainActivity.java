@@ -2,24 +2,23 @@ package com.prototype.princess.trainingwheels;
 
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.JsonReader;
 import android.util.Log;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
@@ -30,8 +29,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,16 +42,19 @@ public class MainActivity extends AppCompatActivity {
                     "Direct Unsubsidized Loan",
                     "Subsidized Federal Stafford Loan",
                     "Unsubsidized Federal Stafford Loan",
-                    "Direct Subsidized Consolidation Loan",//
+                    "Direct Subsidized Consolidation Loan",
                     "Direct Unsubsidized Consolidation Loan",
-                    "FFEL Consolidation Loan",//***
-                    "Direct PLUS Loan for Graduate/Professional Students",//
-                    "FFEL PLUS Loan for Graduate/Professional Students",//
-                    "Direct PLUS Loan for Parents",//
-                    "FFEL PLUS Loan for Parents",//
-                    "Direct PLUS Consolidation Loan",//
-                    "Federal Perkins Loan",
-                    "Private Loan"};
+                    "FFEL Consolidation Loan",
+                    "Direct PLUS Loan for Graduate/Professional Students",
+                    "FFEL PLUS Loan for Graduate/Professional Students",
+                    "Direct PLUS Loan for Parents",
+                    "FFEL PLUS Loan for Parents",
+                    "Direct PLUS Consolidation Loan",
+                    " **NOT IMPLIMENTED** Federal Perkins Loan",
+                    " **NOT IMPLIMENTED** Private Loan"};
+                    //fed perkins and private return no eligb repay methods from web calculator
+                    //later I can impliment my own private loan calculator
+
     String[] loanCategory =
             {
                     "DIRECT_SUBSIDIZED",
@@ -78,19 +81,20 @@ public class MainActivity extends AppCompatActivity {
             "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "PW", "RI", "SC",
             "SD", "TN", "TX", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY"};
 
-    int stateChoice;
+    String stateChoice;
+
+    String[] loanArray = new String[120];
+    int arrayCount;
+    int loanCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final NumberPicker loanNumber1 = (NumberPicker) findViewById(R.id.loanPicker1);
-        final NumberPicker loanNumber2 = (NumberPicker) findViewById(R.id.loanPicker2);
         final RadioGroup taxInput = (RadioGroup) findViewById(R.id.taxInput);
         final RadioButton singleRadio = (RadioButton) findViewById(R.id.singleRadio);
         final RadioButton headRadio = (RadioButton) findViewById(R.id.headRadio);
-        final TextView textView4 = (TextView) findViewById(R.id.textView4);
         Button postButton = (Button) findViewById(R.id.postButton);
 
         postButton.setOnClickListener(new View.OnClickListener() {
@@ -100,27 +104,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        loanNumber1.setMaxValue(10);
-        loanNumber1.setMinValue(1);
-        loanNumber1.setWrapSelectorWheel(false);
-
-        textView4.setVisibility(View.INVISIBLE);
-        loanNumber2.setVisibility(View.INVISIBLE);
-        loanNumber2.setMaxValue(10);
-        loanNumber2.setMinValue(0);
-        loanNumber2.setWrapSelectorWheel(false);
 
         taxInput.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (singleRadio.isChecked() || headRadio.isChecked()) {
-                    textView4.setVisibility(View.INVISIBLE);
-                    loanNumber2.setVisibility(View.INVISIBLE);
-                    loanNumber2.setValue(0);
                     isMarried = false;
                 } else {
-                    textView4.setVisibility(View.VISIBLE);
-                    loanNumber2.setVisibility(View.VISIBLE);
                     isMarried = true;
                 }
             }
@@ -136,7 +126,12 @@ public class MainActivity extends AppCompatActivity {
                 builder1.setItems(loantypes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        loanChoice=which;
+                        loanArray[arrayCount]=loanCodes[which];
+                        arrayCount++;
+                        loanArray[arrayCount]=loantypes[which];
+                        arrayCount++;
+                        loanArray[arrayCount]=loanCategory[which];
+                        arrayCount++;
                     }
                 });
                 AlertDialog loanDialog = builder1.create();
@@ -153,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 builder2.setItems(stateList, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        stateChoice=which;
+                        stateChoice=stateList[which];
                     }
                 });
                 AlertDialog loanDialog = builder2.create();
@@ -161,12 +156,39 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button addLoan = (Button) findViewById(R.id.addLoan);
+        addLoan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                TextView loanList = (TextView) findViewById(R.id.loanList);
+
+                EditText debtInput = (EditText) findViewById(R.id.debtInput);
+                String debtValue = debtInput.getText().toString();
+
+                EditText aprInput = (EditText) findViewById(R.id.aprInput);
+                String aprValue = aprInput.getText().toString();
+
+
+                loanArray[arrayCount]=debtValue;
+                arrayCount++;
+                loanArray[arrayCount]=aprValue;
+                arrayCount++;
+                loanCounter++;
+                String loanListEntry = "Loan #"+ loanCounter +" $" + debtValue + " @ %" + aprValue + "\n";
+                loanList.append(loanListEntry);
+            }
+        });
+
     }
 
     public class MyAsyncTask extends AsyncTask<String, String, String> {
 
-        private static final String TAG = "";
         String unDecodedresp;
+        int loanArrayIndex;
+
+        EditText familysizeField = (EditText) findViewById(R.id.familysizeField);
+        String familysizeInput = familysizeField.getText().toString();
 
         EditText incomeInput = (EditText) findViewById(R.id.incomeInput);
         String incomeValue = incomeInput.getText().toString();
@@ -174,22 +196,14 @@ public class MainActivity extends AppCompatActivity {
         EditText spouseIncomeInput = (EditText) findViewById(R.id.spouseIncomeInput);
         String spouseIncomeValue = spouseIncomeInput.getText().toString();
 
-        EditText debtInput = (EditText) findViewById(R.id.debtInput);
-        String debtValue = debtInput.getText().toString();  //need to implement JSON parsing for this to be used
-
-        EditText aprInput = (EditText) findViewById(R.id.aprInput);
-        String aprValue = aprInput.getText().toString();
-
-        final NumberPicker loanNumber1 = (NumberPicker) findViewById(R.id.loanPicker1);
-        final NumberPicker loanNumber2 = (NumberPicker) findViewById(R.id.loanPicker2);
-        int singleLoannum = loanNumber1.getValue();
-        int spouseLoannum = loanNumber2.getValue();
-
         String married = String.valueOf(isMarried);
 
         @Override
         protected void onPreExecute() {
             Toast.makeText(getApplicationContext(), "post invoke", Toast.LENGTH_LONG).show();
+            TextView respText = (TextView) findViewById(R.id.respText);
+            TextView loanList = (TextView) findViewById(R.id.loanList);
+            loanList.setText("");
 
         }
 
@@ -199,13 +213,13 @@ public class MainActivity extends AppCompatActivity {
             String urlTarget = "https://studentloans.gov/myDirectLoan/mobile/repayment/computeRepaymentPlans.action";
 
 
+
             OkHttpClient myClient = new OkHttpClient();
 
             JSONArray masterSingleContainer = new JSONArray();
             JSONArray masterSpouseContainer = new JSONArray();
-            JSONObject manualLoans = new JSONObject();   //one manualLoans object per single loan
-            JSONObject spouseLoans = new JSONObject();   //one manualLoans object per spouse loan
-            JSONObject type = new JSONObject();
+            //JSONObject amanualLoan = new JSONObject();   //one amanualLoan object per single loan
+            //JSONObject aspouseLoan = new JSONObject();   //one aspouseLoan object per spouse loan
             JSONArray repaymentProgs = new JSONArray();
 
             JSONObject sf = new JSONObject();
@@ -221,17 +235,29 @@ public class MainActivity extends AppCompatActivity {
             JSONObject c3 = new JSONObject();
             repaymentProgs.put(c3);
 
-            for (int i = 0; i < singleLoannum; i++) {
+            JSONObject[] manualLoans = new JSONObject[loanCounter];
+            JSONObject[] typeArray = new JSONObject[loanCounter];
+
+            StringBuilder manualLoanConcat = new StringBuilder();
+            manualLoanConcat.append("[");
+
+            for (int i = 0; i < loanCounter; i++) {
 
                 try {
-                    masterSingleContainer.put(manualLoans);
-                    manualLoans.put("type", type);
 
-                    type.put("code", loanCodes[loanChoice]);
-                    type.put("name", loantypes[loanChoice]);
-                    type.put("category", loanCategory[loanChoice]);
+                    manualLoans[i] = new JSONObject();
+                    typeArray[i] = new JSONObject();
 
-                    type.put("eligibleRepaymentPrograms", repaymentProgs);
+                    manualLoans[i].put("type", typeArray[i]);
+                    typeArray[i].put("code", loanArray[loanArrayIndex]);
+                    loanArrayIndex++;
+                    typeArray[i].put("name", loanArray[loanArrayIndex]);
+                    loanArrayIndex++;
+                    typeArray[i].put("category", loanArray[loanArrayIndex]);
+                    loanArrayIndex++;
+
+                    typeArray[i].put("eligibleRepaymentPrograms", repaymentProgs);
+
 
                     try {
                         sf.put("name", "SF");
@@ -252,12 +278,22 @@ public class MainActivity extends AppCompatActivity {
                         c3.put("name", "C3");
                         c3.put("eligible", "true");
 
-                        manualLoans.put("balance", debtValue);
-                        manualLoans.put("interestRate", aprValue);
-                        manualLoans.put("loanDate", "undefined"); //not sure if these need to be here
-                        manualLoans.put("servicer", "undefined");
-                        manualLoans.put("firstDisbursementDate", null);
-                        manualLoans.put("subsidyLossDate", "N/A");
+
+
+                        manualLoans[i].put("balance", loanArray[loanArrayIndex]);
+                        loanArrayIndex++;
+                        manualLoans[i].put("interestRate", loanArray[loanArrayIndex]);
+                        loanArrayIndex++;
+                        manualLoans[i].put("loanDate", "undefined"); //not sure if these need to be here
+                        manualLoans[i].put("servicer", "undefined");
+                        manualLoans[i].put("firstDisbursementDate", "null");
+                        manualLoans[i].put("subsidyLossDate", "N/A");
+
+                        manualLoanConcat.append( manualLoans[i].toString());
+                        if (i!=loanCounter-1) {
+                            manualLoanConcat.append(",");
+                        }
+
                     } catch (JSONException e) {
 
                     }
@@ -267,16 +303,22 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-
-            if (spouseLoannum > 0) ;
+            manualLoanConcat.append("]");
+            loanCounter=0;
+            arrayCount=0;
+            Arrays.fill(loanArray, "0");
+/*
+            if (spouseLoannum != 0) ;
             {
-                for (int i = 0; i < spouseLoannum; i++) {
+                for (int i = 0; i < loanCounter; i++) {
 
                     try {
-                        spouseLoans.put("type", type);
-                        type.put("code", "D1");
-                        type.put("name", "Direct Subsidized Loan");
-                        type.put("category", "DIRECT_SUBSIDIZED");
+                        masterSpouseContainer.put(aspouseLoan);
+                        aspouseLoan.put("type", type);
+
+                        type.put("category", loanArray[loanArrayIndex]);
+                        type.put("code", loanArray[loanArrayIndex++]);
+                        type.put("name", loantypes[loanArrayIndex++]);
 
                         type.put("eligibleRepaymentPrograms", repaymentProgs);
 
@@ -299,14 +341,14 @@ public class MainActivity extends AppCompatActivity {
                             c3.put("name", "C3");
                             c3.put("eligible", "true");
 
-                            spouseLoans.put("balance", debtValue);
-                            spouseLoans.put("interestRate", aprValue);
-                            spouseLoans.put("loanDate", "undefined"); //not sure if these need to be here
-                            spouseLoans.put("servicer", "undefined");
-                            spouseLoans.put("firstDisbursementDate", null);
-                            spouseLoans.put("subsidyLossDate", "N/A");
+                            aspouseLoan.put("balance", loantypes[loanArrayIndex++]);
+                            aspouseLoan.put("interestRate", loantypes[loanArrayIndex++]);
+                            aspouseLoan.put("loanDate", "undefined"); //not sure if these need to be here
+                            aspouseLoan.put("servicer", "undefined");
+                            aspouseLoan.put("firstDisbursementDate", null);
+                            aspouseLoan.put("subsidyLossDate", "N/A");
 
-                            masterSpouseContainer.put(spouseLoans);
+
                         } catch (JSONException e) {
 
                         }
@@ -318,22 +360,22 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-
-            String jsonSinglePayload = masterSingleContainer.toString();
-            String jsonSpousePayload = masterSpouseContainer.toString();
+*/
+            String jsonSinglePayload = manualLoanConcat.toString();
+            //String jsonSpousePayload = .toString();
             jsonSinglePayload = jsonSinglePayload.replace("N\\/A", "N/A");
-            jsonSpousePayload = jsonSpousePayload.replace("N\\/A", "N/A");
+            //jsonSpousePayload = jsonSpousePayload.replace("N\\/A", "N/A");
 
             //end build json array object
 
             RequestBody myForm = new FormEncodingBuilder()
                     .add("isMarried", married)
-                    .add("stateCode", stateList[stateChoice])
+                    .add("stateCode", stateChoice)
                     .add("grossIncome", incomeValue)
                     .add("spouseGrossIncome", spouseIncomeValue)
-                    .add("familySize", "1") //not wired up yet
+                    .add("familySize", familysizeInput)
                     .add("manuallyAddedLoans", jsonSinglePayload)
-                    .add("spouseLoans", jsonSpousePayload)
+                    .add("spouseLoans", "[]")
                     .build();
 
             Log.v("FormContents!", myForm.toString());
@@ -354,8 +396,6 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            Log.v(TAG, unDecodedresp);
-
             return null;
 
         }
@@ -371,6 +411,8 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject parsedResponce = new JSONObject(unDecodedresp);
                 JSONArray repayPlans = parsedResponce.getJSONArray("repaymentPlanTypes");
 
+                //Log.v("server responce is: ", parsedResponce.toString());
+
                 for (int i = 0; i < 9; i++) {
 
                     JSONObject individualPlans = repayPlans.getJSONObject(i);
@@ -383,7 +425,6 @@ public class MainActivity extends AppCompatActivity {
                     double sumInterest = individualPlans.getInt("totalInterestPaid");
                     double sumTotal = individualPlans.getInt("totalAmountPaid");
                     //later I might want to see if I need to use the includesExtended, has BothLoanTypes, and hasConsolLoansOnly bools from post Response.
-
                     respText.append("Repayment Type: " + plantype + "\nLoan Period (Months): " + loanTime + "\nInitial Payment Amount: $" + initPayment + "\nFinal Payment Amount: $" + finPayment + "\nAmount Forgiven: $" + forgiven + "\nTotal Interest Payed: $" + sumInterest + "\nTotal Sum Payed: $" + sumTotal + "\n\n");
 
                 }

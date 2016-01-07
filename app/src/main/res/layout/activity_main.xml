@@ -16,7 +16,9 @@
         android:layout_above="@+id/postButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="26dp">
+        android:layout_marginBottom="26dp"
+        android:layout_alignRight="@+id/addLoan"
+        android:layout_alignEnd="@+id/addLoan">
 
         <TextView
             android:layout_width="match_parent"
@@ -51,10 +53,11 @@
         android:id="@+id/incomeInput"
         android:hint="Gross Income"
         android:textAlignment="center"
-        android:layout_above="@+id/spouseIncomeInput"
+        android:layout_alignTop="@+id/taxInput"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/scrollView"
-        android:layout_toEndOf="@+id/scrollView" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/spouseIncomeInput"
+        android:layout_alignStart="@+id/spouseIncomeInput" />
 
     <RadioGroup
         android:id="@+id/taxInput"
@@ -99,52 +102,6 @@
             android:id="@+id/headRadio" />
     </RadioGroup>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignBottom="@+id/taxInput"
-        android:layout_toEndOf="@+id/scrollView2"
-        android:id="@+id/frameLayout"
-        android:layout_toRightOf="@+id/scrollView2">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Loan Number"
-            android:id="@+id/textView2"
-            android:layout_gravity="center_horizontal|top" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Yours"
-            android:id="@+id/textView3"
-            android:layout_gravity="left|center_vertical" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Spouse"
-            android:id="@+id/textView4"
-            android:layout_gravity="left|bottom" />
-
-        <NumberPicker
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:id="@+id/loanPicker1"
-            android:layout_gravity="right|center_vertical" />
-
-        <NumberPicker
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:id="@+id/loanPicker2"
-            android:layout_gravity="right|bottom" >
-
-        </NumberPicker>
-    </FrameLayout>
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -153,11 +110,11 @@
         android:id="@+id/spouseIncomeInput"
         android:hint="Spouse Income"
         android:textAlignment="center"
-        android:layout_alignBottom="@+id/scrollView"
+        android:layout_below="@+id/incomeInput"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/scrollView"
-        android:layout_toEndOf="@+id/scrollView" />
+        android:layout_toRightOf="@+id/taxInput"
+        android:layout_toEndOf="@+id/taxInput" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -171,8 +128,9 @@
         android:layout_column="3"
         android:layout_below="@+id/taxInput"
         android:layout_marginTop="24dp"
-        android:layout_toRightOf="@+id/scrollView"
-        android:layout_toEndOf="@+id/scrollView" />
+
+        android:layout_alignLeft="@+id/spouseIncomeInput"
+        android:layout_alignStart="@+id/spouseIncomeInput" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -187,8 +145,9 @@
         android:layout_column="3"
         android:layout_below="@+id/debtInput"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/scrollView"
-        android:layout_toEndOf="@+id/scrollView" />
+
+        android:layout_alignLeft="@+id/debtInput"
+        android:layout_alignStart="@+id/debtInput" />
 
     <Button
         android:layout_width="wrap_content"
@@ -199,8 +158,10 @@
         android:layout_column="3"
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/aprInput"
-        android:layout_toRightOf="@+id/scrollView2"
-        android:layout_toEndOf="@+id/scrollView2" />
+        android:layout_alignRight="@+id/aprInput"
+        android:layout_alignEnd="@+id/aprInput"
+        android:layout_marginRight="34dp"
+        android:layout_marginEnd="34dp" />
 
     <ScrollView
         android:layout_width="wrap_content"
@@ -218,7 +179,6 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Loans Shown Here"
             android:id="@+id/loanList" />
     </ScrollView>
 
@@ -238,8 +198,22 @@
         android:layout_height="wrap_content"
         android:text="State"
         android:id="@+id/stateButton"
-        android:layout_below="@+id/aprInput"
-        android:layout_toRightOf="@+id/loanSelectbutton"
-        android:layout_toEndOf="@+id/loanSelectbutton" />
+        android:layout_below="@+id/familysizeField"
+        android:layout_alignLeft="@+id/addLoan"
+        android:layout_alignStart="@+id/addLoan" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/familysizeField"
+        android:layout_below="@+id/spouseIncomeInput"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:hint="Family Size"
+        android:textAlignment="center"
+        android:layout_alignLeft="@+id/spouseIncomeInput"
+        android:layout_alignStart="@+id/spouseIncomeInput" />
 
 </RelativeLayout>
