@@ -1,6 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/debtInput"
+        android:hint="Loan Balance"
+        android:textAlignment="center"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_below="@+id/taxInput"
+        android:layout_marginTop="24dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/aprInput"
+        android:textAlignment="center"
+        android:hint="APR Percent"
+        android:layout_row="1"
+        android:layout_column="1" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Loan"
+        android:id="@+id/addLoan"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_row="2"
+        android:layout_column="1" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loan Type"
+        android:id="@+id/loanSelectbutton"
+        android:layout_row="3"
+        android:layout_column="1"
+        android:layout_marginRight="34dp"
+        android:layout_marginEnd="34dp" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loanListscroll"
+        android:layout_row="4"
+        android:layout_column="2">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/loanList"
+            android:text="Appended Loan List"/>
+    </ScrollView>
+
+</GridLayout>
