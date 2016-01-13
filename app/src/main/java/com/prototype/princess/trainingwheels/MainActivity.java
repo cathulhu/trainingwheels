@@ -3,6 +3,7 @@ package com.prototype.princess.trainingwheels;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Parcelable;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.prototype.princess.trainingwheels.stabs.SlidingTabLayout;
+import com.prototype.princess.trainingwheels.stabs.FragPagerAdapter;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -92,6 +95,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        //controls switching between tabs
+
+        viewPager.setAdapter(new FragPagerAdapter(getSupportFragmentManager(), MainActivity.this));
+        //returns proper fragment based on its index
+
+        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+        //implements sliding tab layout element into main activity
+
+        slidingTabLayout.setViewPager(viewPager);
+        //connect viewpager with the actual tab names/list into the layout
+
+/*
         final RadioGroup taxInput = (RadioGroup) findViewById(R.id.taxInput);
         final RadioButton singleRadio = (RadioButton) findViewById(R.id.singleRadio);
         final RadioButton headRadio = (RadioButton) findViewById(R.id.headRadio);
@@ -360,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-*/
+
             String jsonSinglePayload = manualLoanConcat.toString();
             //String jsonSpousePayload = .toString();
             jsonSinglePayload = jsonSinglePayload.replace("N\\/A", "N/A");
@@ -434,6 +451,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+    */
 
     }
 
