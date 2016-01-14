@@ -114,7 +114,7 @@
         android:layout_below="@+id/familysizeField"
         android:layout_alignLeft="@+id/addLoan"
         android:layout_alignStart="@+id/addLoan"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center_horizontal|left"
         android:layout_row="5"
         android:layout_column="0" />
 
