@@ -5,13 +5,17 @@ import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ListFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -19,9 +23,12 @@ import android.widget.TextView;
 import com.prototype.princess.trainingwheels.R;
 import com.prototype.princess.trainingwheels.AsyncRequest;
 
-public class FragTabLoan extends Fragment {
+public class FragTabLoan extends ListFragment {
+
+
 
     public static String[] loanArray = new String[120];
+
     public static int arrayCount;
     public static int loanCounter;
 
@@ -62,6 +69,9 @@ public class FragTabLoan extends Fragment {
     String[] loanCodes = {"D1", "D2", "SF", "SU","D6","D5", "CL", "D3", "GB", "D4", "PL", "D7", "PU", "PV"};
     int loanChoice;
 
+    String[] loanSummary;
+    String lastloantype;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,6 +94,8 @@ public class FragTabLoan extends Fragment {
                         arrayCount++;
                         loanArray[arrayCount] = loanCategory[which];
                         arrayCount++;
+
+                        lastloantype=loantypes[which];
                     }
                 });
                 AlertDialog loanDialog = builder1.create();
@@ -98,8 +110,6 @@ public class FragTabLoan extends Fragment {
             @Override
             public void onClick(View v) {
 
-                TextView loanList = (TextView) v.getRootView().findViewById(R.id.loanList);
-
                 EditText debtInput = (EditText) v.getRootView().findViewById(R.id.debtInput);
                 String debtValue = debtInput.getText().toString();
 
@@ -112,8 +122,10 @@ public class FragTabLoan extends Fragment {
                 loanArray[arrayCount] = aprValue;
                 arrayCount++;
                 loanCounter++;
-                String loanListEntry = "Loan #" + loanCounter + " $" + debtValue + " @ %" + aprValue + "\n";
-                loanList.append(loanListEntry);
+
+                String loanListEntry = "Loan #" +loanCounter + " " + lastloantype + " $" + debtValue + " @ %" + aprValue + "\n";
+                loanSummary[0]= loanListEntry;
+
             }
         });
 

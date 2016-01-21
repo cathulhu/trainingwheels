@@ -23,8 +23,13 @@ public class FragTabInfo extends Fragment {
             "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MH", "MI", "MN", "MO", "MS", "MT",
             "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "PW", "RI", "SC",
             "SD", "TN", "TX", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY"};
+
+    String[] taxFilingOptions = {"SINGLE","MARRIED_FILING_SINGLY", "MARRIED_FILING_JOINTLY", "HEAD_OF_HOUSEHOLD"};
+
     public static String statePick;
     public static String familysizeInput;
+    public static String filingstatus;
+    public static String isMarried="false";
     public static String incomeValue;
     public static String spouseIncomeValue;
 
@@ -56,6 +61,32 @@ public class FragTabInfo extends Fragment {
 
                 EditText spouseIncomeInput = (EditText) view.findViewById(R.id.spouseIncomeInput);
                 spouseIncomeValue = spouseIncomeInput.getText().toString();
+            }
+        });
+
+        RadioGroup taxStatusRadio = (RadioGroup) view.findViewById(R.id.taxInput);
+        /*
+        RadioGroup singleRadio = (RadioGroup) view.findViewById(R.id.singleRadio);
+                RadioGroup marriedSepRadio = (RadioGroup) view.findViewById(R.id.marriedSepRadio);
+                RadioGroup marriedTogRadio = (RadioGroup) view.findViewById(R.id.marriedTogRadio);
+                RadioGroup headRadio = (RadioGroup) view.findViewById(R.id.taxInput);
+
+         */
+
+
+
+        taxStatusRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioGroup taxStatusRadio = (RadioGroup) view.findViewById(R.id.taxInput);
+                RadioButton checkedRadioButton = (RadioButton)taxStatusRadio.findViewById(checkedId);
+
+                int choice = taxStatusRadio.indexOfChild(checkedRadioButton)-1;
+                filingstatus=taxFilingOptions[choice];
+
+                if (choice == 1 || choice == 2) {
+                    isMarried = "true";
+                }
             }
         });
 

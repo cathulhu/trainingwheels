@@ -43,10 +43,8 @@ import java.util.Arrays;
         String familysizeInput = FragTabInfo.familysizeInput;
         String incomeValue = FragTabInfo.incomeValue;
         String spouseIncomeValue =FragTabInfo.spouseIncomeValue;
-
-        //public boolean isMarried; //disabling this for now
-        String married= "true";
-                //String.valueOf(isMarried);
+        String filingstatus = FragTabInfo.filingstatus;
+        String isMarried = FragTabInfo.isMarried;
         String unDecodedresp;
         int loanArrayIndex;
 
@@ -58,7 +56,7 @@ import java.util.Arrays;
 
         @Override
         protected void onPreExecute() {
-            married="false";
+
 
         }
 
@@ -161,7 +159,6 @@ import java.util.Arrays;
             manualLoanConcat.append("]");
             loanCounter=0;
             arrayCount=0;
-            Arrays.fill(loanArray, "0");
 /*
             if (spouseLoannum != 0) ;
             {
@@ -224,10 +221,11 @@ import java.util.Arrays;
             //end build json array object
 
             RequestBody myForm = new FormEncodingBuilder()
-                    .add("isMarried", married)
+                    .add("isMarried", isMarried)
                     .add("stateCode", stateChoice)
                     .add("grossIncome", incomeValue)
                     .add("spouseGrossIncome", spouseIncomeValue)
+                    .add("filingStatus", filingstatus)
                     .add("familySize", familysizeInput)
                     .add("manuallyAddedLoans", jsonSinglePayload)
                     .add("spouseLoans", "[]")
@@ -263,7 +261,7 @@ import java.util.Arrays;
                 JSONObject parsedResponce = new JSONObject(unDecodedresp);
                 JSONArray repayPlans = parsedResponce.getJSONArray("repaymentPlanTypes");
 
-                //Log.v("server responce is: ", parsedResponce.toString());
+               Log.v("server responce is: ", parsedResponce.toString());
 
                 for (int i = 0; i < 9; i++) {
 
