@@ -19,6 +19,11 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.prototype.princess.trainingwheels.R;
 import com.prototype.princess.trainingwheels.AsyncRequest;
@@ -69,13 +74,36 @@ public class FragTabLoan extends ListFragment {
     String[] loanCodes = {"D1", "D2", "SF", "SU","D6","D5", "CL", "D3", "GB", "D4", "PL", "D7", "PU", "PV"};
     int loanChoice;
 
-    String[] loanSummary;
+    String[] loanSummary = {"cat1", "cat2", "cat3"};
     String lastloantype;
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, loanSummary);
+        setListAdapter(adapter);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, loanSummary);
+        setListAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+    }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        super.onActivityCreated(savedInstanceState);
         View view = inflater.inflate(R.layout.tab1loan, container, false);
+
+
 
         Button loanSelectbutton = (Button) view.findViewById(R.id.loanSelectbutton);
         loanSelectbutton.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +138,10 @@ public class FragTabLoan extends ListFragment {
             @Override
             public void onClick(View v) {
 
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                        android.R.layout.simple_list_item_1, loanSummary);
+                setListAdapter(adapter);
+
                 EditText debtInput = (EditText) v.getRootView().findViewById(R.id.debtInput);
                 String debtValue = debtInput.getText().toString();
 
@@ -121,10 +153,14 @@ public class FragTabLoan extends ListFragment {
                 arrayCount++;
                 loanArray[arrayCount] = aprValue;
                 arrayCount++;
-                loanCounter++;
+
 
                 String loanListEntry = "Loan #" +loanCounter + " " + lastloantype + " $" + debtValue + " @ %" + aprValue + "\n";
-                loanSummary[0]= loanListEntry;
+                loanSummary[loanCounter]= loanListEntry;
+
+                adapter.notifyDataSetChanged();
+
+                loanCounter++;
 
             }
         });
