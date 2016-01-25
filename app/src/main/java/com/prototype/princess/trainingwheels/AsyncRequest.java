@@ -49,20 +49,10 @@ import java.util.Arrays;
         int loanArrayIndex;
 
 
-
-
-
-
-
-        @Override
-        protected void onPreExecute() {
-
-
-        }
-
         @Override
         protected String doInBackground(String... params) {     // Runs in background thread
 
+            FragTabCalc.serverResponce = "Response Here -background";
             String urlTarget = "https://studentloans.gov/myDirectLoan/mobile/repayment/computeRepaymentPlans.action";
 
 
@@ -256,6 +246,7 @@ import java.util.Arrays;
         @Override
         public void onPostExecute(String resp) {
             super.onPostExecute(resp);
+            FragTabCalc.serverResponce = "";
 
             try {
                 JSONObject parsedResponce = new JSONObject(unDecodedresp);
@@ -281,7 +272,7 @@ import java.util.Arrays;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+            return;
 
         }
 

@@ -28,7 +28,7 @@ public class FragTabCalc extends Fragment {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AsyncRequest().execute();
+                new AsyncRequest().execute("", "", "");
                 TextView respText = (TextView) view.getRootView().findViewById(R.id.respText);
                 respText.setText(serverResponce);
             }
