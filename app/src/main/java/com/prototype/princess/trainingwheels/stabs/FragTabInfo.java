@@ -65,16 +65,6 @@ public class FragTabInfo extends Fragment {
         });
 
         RadioGroup taxStatusRadio = (RadioGroup) view.findViewById(R.id.taxInput);
-        /*
-        RadioGroup singleRadio = (RadioGroup) view.findViewById(R.id.singleRadio);
-                RadioGroup marriedSepRadio = (RadioGroup) view.findViewById(R.id.marriedSepRadio);
-                RadioGroup marriedTogRadio = (RadioGroup) view.findViewById(R.id.marriedTogRadio);
-                RadioGroup headRadio = (RadioGroup) view.findViewById(R.id.taxInput);
-
-         */
-
-
-
         taxStatusRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

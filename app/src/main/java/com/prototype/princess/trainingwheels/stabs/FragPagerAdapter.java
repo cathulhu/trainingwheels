@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class FragPagerAdapter extends FragmentPagerAdapter {
 
-    String[] tabtitles = {"Tax Info", "Loan Info", "Analysis"};
+    String[] tabtitles = {"Tax Info", "Loan Info", "Result", "Analysis"};
 
     private Context context;
 
@@ -25,13 +25,15 @@ public class FragPagerAdapter extends FragmentPagerAdapter {
             return new FragTabLoan();
         } else if (position == 2) {
             return new FragTabCalc();
+        } else if (position == 3) {
+            return new FragTabAnalysis();
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Override
