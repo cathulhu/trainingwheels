@@ -29,11 +29,12 @@ public class FragTabAnalysis extends Fragment {
     double principal = sumTotal-sumInterest;
     int taxcoord1;
     int taxcoord2;
+    double incomeBracketDiff;
 
     double[] taxBracketsPercent2016 = {.10, .15, .25, .28, .33, .35, .396};
-    double[] taxBracketsGrossSingle2016 = {9275, 37650, 91150, 190150, 413350, 415050};
-    double[] taxBracketsGrossJoint2016 = {18550, 75300, 151900, 231450, 413350, 466950};
-    double[] taxBracketsGrossHead2016 = {13250, 50400, 130150, 210800, 413350, 441000};
+    double[] taxBracketsGrossSingle2016 = {0, 9275, 37650, 91150, 190150, 413350, 415050};
+    double[] taxBracketsGrossJoint2016 = {0, 18550, 75300, 151900, 231450, 413350, 466950};
+    double[] taxBracketsGrossHead2016 = {0, 13250, 50400, 130150, 210800, 413350, 441000};
     double[][] taxContainer = {taxBracketsGrossSingle2016, taxBracketsGrossJoint2016, taxBracketsGrossHead2016};
 
     public void TaxCalc ()
@@ -47,9 +48,10 @@ public class FragTabAnalysis extends Fragment {
             if (runningTotal > taxContainer[taxcoord1][i])
             {
                 double taxRate = taxBracketsPercent2016[i];
-                workingTotal = taxRate * runningTotal;  //tax owed in this bracket
-                runningTotal=runningTotal-(runningTotal-taxContainer[taxcoord1][i-1]);
+                incomeBracketDiff= runningTotal-(taxContainer[taxcoord1][i]);
+                runningTotal= runningTotal - incomeBracketDiff
                 //ex: 500,000=500,000-(500,000-413,350) <--86350, new runningTotal=41350, next bracket
+                workingTotal += taxRate * incomeBracketDiff;  //tax owed
             }
 
         }
