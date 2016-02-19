@@ -23,11 +23,23 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.prototype.princess.trainingwheels.AsyncRequest;
 import com.prototype.princess.trainingwheels.PostComThread;
 import com.prototype.princess.trainingwheels.R;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class FragTabAnalysis extends Fragment {
+
+    static public int[] cost = new int[10];
+
+//    public static JSONArray repaymentPlans;
+
+//    int paid = repaymentPlans.getJSONObject(0);
+//            //repaymentPlans[0].getInt("totalAmountPaid");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,17 +47,33 @@ public class FragTabAnalysis extends Fragment {
 
         BarChart chart = (BarChart) view.findViewById(R.id.chart);
 
+
         List<BarEntry> yvals = new ArrayList<>();   //1. make y values list for graph
-        yvals.add(new BarEntry(9, 0));              //2. Add y values (value, index) to list
-        yvals.add(new BarEntry(20, 1));
+//        yvals.add(new BarEntry(9, 0));              //2. Add y values (value, index) to list
+//        yvals.add(new BarEntry(20, 1));
+
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                yvals.add(new BarEntry(cost[i], i));
+            }
+        }
+
 
         List<String> xvals = new ArrayList<String>();   //3. make x value labels
-        xvals.add("one");
-        xvals.add("two");
+        xvals.add("plan1");
+        xvals.add("plan2");
+        xvals.add("plan3");
+        xvals.add("plan4");
+        xvals.add("plan5");
+        xvals.add("plan6");
+        xvals.add("plan7");
+        xvals.add("plan8");
+        xvals.add("plan9");
 
         BarDataSet ydata = new BarDataSet(yvals, "label");  //4. New BarDataSet to contain yvalues and descriptions
-        ydata.setBarSpacePercent(55f);
-        ydata.setColor(Color.rgb(192, 255, 140));
+        //ydata.setBarSpacePercent(55f);
+        ydata.setColor(Color.rgb(92, 16, 220));
 
         List<IBarDataSet> dataSets = new ArrayList<>();     //5. Add the BarDataSet (ydata) to the set of all datasets available to graph within a List containing IBarDataSet objects
         dataSets.add(ydata);

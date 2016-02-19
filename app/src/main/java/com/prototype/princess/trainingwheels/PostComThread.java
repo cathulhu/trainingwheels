@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.LayoutInflater;
 
+import com.prototype.princess.trainingwheels.stabs.FragTabAnalysis;
 import com.prototype.princess.trainingwheels.stabs.FragTabCalc;
 import com.prototype.princess.trainingwheels.stabs.FragTabInfo;
 import com.prototype.princess.trainingwheels.stabs.FragTabLoan;
@@ -198,15 +199,17 @@ public class PostComThread implements Runnable {
 
                 String plantype = individualPlans.getString("repaymentPlan");
                 int loanTime = individualPlans.getInt("loanPeriod");
-                double initPayment = individualPlans.getInt("initialMonthlyPayment");
-                double finPayment = individualPlans.getInt("finalMonthlyPayment");
-                double forgiven = individualPlans.getInt("amountForgiven");
-                double sumInterest = individualPlans.getInt("totalInterestPaid");
-                double sumTotal = individualPlans.getInt("totalAmountPaid");
+                int initPayment = individualPlans.getInt("initialMonthlyPayment");
+                int finPayment = individualPlans.getInt("finalMonthlyPayment");
+                int forgiven = individualPlans.getInt("amountForgiven");
+                int sumInterest = individualPlans.getInt("totalInterestPaid");
+                int sumTotal = individualPlans.getInt("totalAmountPaid");
                 //later I might want to see if I need to use the includesExtended, has BothLoanTypes, and hasConsolLoansOnly bools from post Response.
                 FragTabCalc.serverResponce = FragTabCalc.serverResponce + ("Repayment Type: " + plantype + "\nLoan Period (Months): " + loanTime + "\nInitial Payment Amount: $" + initPayment + "\nFinal Payment Amount: $" + finPayment + "\nAmount Forgiven: $" + forgiven + "\nTotal Interest Payed: $" + sumInterest + "\nTotal Sum Payed: $" + sumTotal + "\n\n");
 
+                if (i<8) FragTabAnalysis.cost[i]=sumTotal;
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
