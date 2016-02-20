@@ -213,7 +213,9 @@ public class PostComThread implements Runnable {
                     FragTabAnalysis.interest[i]=sumInterest;
                     if (forgiven >= 50)
                     {
-                        FragTabAnalysis.tax[i]=forgiven*0.2;
+
+                        TaxCalc newTaxcalc = new TaxCalc();
+                        FragTabAnalysis.tax[i]= newTaxcalc.Calculation((double)forgiven);
                     }
                 }
             }
