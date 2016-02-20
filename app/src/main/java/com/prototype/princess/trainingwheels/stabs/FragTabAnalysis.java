@@ -15,6 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -32,14 +35,13 @@ import java.util.List;
 
 
 
-public class FragTabAnalysis extends Fragment {
+public class FragTabAnalysis extends Fragment{
 
-    static public int[] cost = new int[10];
+    static public int[] cost = new int[11];
+    static public int[] interest = new int[11];
+    static public double[] tax = new double[11];
+    static public int[] colors = {92,16,220};
 
-//    public static JSONArray repaymentPlans;
-
-//    int paid = repaymentPlans.getJSONObject(0);
-//            //repaymentPlans[0].getInt("totalAmountPaid");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,28 +57,39 @@ public class FragTabAnalysis extends Fragment {
         {
             for (int i = 0; i < 8; i++)
             {
-                yvals.add(new BarEntry(cost[i], i));
+                float[] eachbar = {cost[i], interest[i], (float)tax[i+2] };
+
+                yvals.add(new BarEntry(eachbar, i));
+//                yvals.add(new BarEntry(interest[i], i));
+//                yvals.add(new BarEntry((int)tax[i], i));
+
             }
         }
 
-
         List<String> xvals = new ArrayList<String>();   //3. make x value labels
-        xvals.add("plan1");
-        xvals.add("plan2");
-        xvals.add("plan3");
-        xvals.add("plan4");
-        xvals.add("plan5");
-        xvals.add("plan6");
-        xvals.add("plan7");
+        xvals.add("Standard 10 Year");
+        xvals.add("Graduated 10 Year");
+        xvals.add("Revised P.A.Y.E 25 Year");
+        xvals.add("P.A.Y.E 20 Year");
+        xvals.add("Income Based 25 Year");
+        xvals.add("IBR New Borrowers");
+        xvals.add("Income Continent Repayment");
         xvals.add("plan8");
-        xvals.add("plan9");
 
-        BarDataSet ydata = new BarDataSet(yvals, "label");  //4. New BarDataSet to contain yvalues and descriptions
+
+        BarDataSet ydata = new BarDataSet(yvals, "Repayment Plan Breakdown");  //4. New BarDataSet to contain yvalues and descriptions
         //ydata.setBarSpacePercent(55f);
-        ydata.setColor(Color.rgb(92, 16, 220));
+        //ydata.setColor(Color.rgb(92, 16, 220));
+        ydata.setColors(getColors());
+        ydata.setStackLabels(new String[]{"Principal", "Interest", "Forgiven Taxes"});
 
         List<IBarDataSet> dataSets = new ArrayList<>();     //5. Add the BarDataSet (ydata) to the set of all datasets available to graph within a List containing IBarDataSet objects
         dataSets.add(ydata);
+
+        // YAxis yaxis = chart.getAxisRight();
+       // yaxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        chart.setDrawValueAboveBar(false);
+
 
         BarData data = new BarData(xvals, dataSets);        //6. Add the set of all data to the master data container along with the x labels;
         data.setValueTextSize(10f);
@@ -89,6 +102,21 @@ public class FragTabAnalysis extends Fragment {
 
         return view;
     }
+
+    private int[] getColors() {
+
+        int stacksize = 3;
+
+        // have as many colors as stack-values per entry
+        int[] colors = new int[stacksize];
+
+        for (int i = 0; i < stacksize; i++) {
+            colors[i] = ColorTemplate.VORDIPLOM_COLORS[i];
+        }
+
+        return colors;
+    }
+
 }
 
 
