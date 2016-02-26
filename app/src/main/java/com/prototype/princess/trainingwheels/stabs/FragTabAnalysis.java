@@ -55,7 +55,7 @@ public class FragTabAnalysis extends Fragment{
 //        yvals.add(new BarEntry(20, 1));
 
         {
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 9; i++)
             {
                 float[] eachbar = {cost[i], interest[i], (float)tax[i] };
                 yvals.add(new BarEntry(eachbar, i));
@@ -65,15 +65,25 @@ public class FragTabAnalysis extends Fragment{
         List<String> xvals = new ArrayList<String>();   //3. make x value labels
         xvals.add("Standard 10 Year");
         xvals.add("Graduated 10 Year");
+        xvals.add("Extended 20 Year");
+        xvals.add("Extended Graduated 20 Year");
         xvals.add("Revised P.A.Y.E 25 Year");
         xvals.add("P.A.Y.E 20 Year");
         xvals.add("Income Based 25 Year");
         xvals.add("IBR New Borrowers");
         xvals.add("Income Continent Repayment");
-        xvals.add("plan8");
+ //       xvals.add("x");
+
+        XAxis xAxis = chart.getXAxis();
+   //     xAxis.setTextColor(Color.WHITE);
+
+        YAxis yAxis = chart.getAxisLeft();
+   //     yAxis.setTextColor(Color.WHITE);
+        yAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
 
 
         BarDataSet ydata = new BarDataSet(yvals, "Repayment Plan Breakdown");  //4. New BarDataSet to contain yvalues and descriptions
+        ydata.setDrawValues(false);
         //ydata.setBarSpacePercent(55f);
         //ydata.setColor(Color.rgb(92, 16, 220)); //only used for setting one bar, one color
         ydata.setColors(getColors());
@@ -82,8 +92,8 @@ public class FragTabAnalysis extends Fragment{
         List<IBarDataSet> dataSets = new ArrayList<>();     //5. Add the BarDataSet (ydata) to the set of all datasets available to graph within a List containing IBarDataSet objects
         dataSets.add(ydata);
 
-        // YAxis yaxis = chart.getAxisRight();
-       // yaxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+         YAxis yRaXxis = chart.getAxisRight();
+        yRaXxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         chart.setDrawValueAboveBar(false);
 
 
@@ -92,8 +102,14 @@ public class FragTabAnalysis extends Fragment{
 
         chart.setData(data);
 
-        chart.setDescription("My Chart");
-        chart.animateXY(2000, 2000);
+ //       Legend l = chart.getLegend();
+ //       l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART_INSIDE);
+ //       l.setCustom(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9}, new String[]{"Standard 10 Year", "Graduated 10 Year", "Extended 20 Year", "Extended Graduated 20 Year", "Revised P.A.Y.E 25 Year", "P.A.Y.E 20 Year", "Income Based 25 Year", "IBR New Borrowers", "Income Continent Repayment"});
+ //       l.setTextColor(Color.WHITE);
+ //       l.setTextSize(15f);
+
+        chart.setDescription(" ");
+        chart.animateXY(1000, 1000);
         chart.invalidate();
 
         return view;
@@ -107,7 +123,7 @@ public class FragTabAnalysis extends Fragment{
         int[] colors = new int[stacksize];
 
         for (int i = 0; i < stacksize; i++) {
-            colors[i] = ColorTemplate.VORDIPLOM_COLORS[i];
+            colors[i] = ColorTemplate.PASTEL_COLORS[i];
         }
 
         return colors;

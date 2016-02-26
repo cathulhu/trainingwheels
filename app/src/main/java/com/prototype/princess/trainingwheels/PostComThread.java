@@ -207,9 +207,8 @@ public class PostComThread implements Runnable {
                 //later I might want to see if I need to use the includesExtended, has BothLoanTypes, and hasConsolLoansOnly bools from post Response.
                 FragTabCalc.serverResponce = FragTabCalc.serverResponce + ("Repayment Type: " + plantype + "\nLoan Period (Months): " + loanTime + "\nInitial Payment Amount: $" + initPayment + "\nFinal Payment Amount: $" + finPayment + "\nAmount Forgiven: $" + forgiven + "\nTotal Interest Payed: $" + sumInterest + "\nTotal Sum Payed: $" + sumTotal + "\n\n");
 
-                if (i<10)
-                {
-                    FragTabAnalysis.cost[i]=sumTotal;
+
+                    FragTabAnalysis.cost[i]=sumTotal-sumInterest;
                     FragTabAnalysis.interest[i]=sumInterest;
                     if (forgiven >= 50)
                     {
@@ -217,7 +216,7 @@ public class PostComThread implements Runnable {
                         TaxCalc newTaxcalc = new TaxCalc();
                         FragTabAnalysis.tax[i]= newTaxcalc.Calculation((double)forgiven);
                     }
-                }
+
             }
 
         } catch (JSONException e) {
