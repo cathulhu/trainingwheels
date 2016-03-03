@@ -9,7 +9,7 @@ public class TaxCalc {
     double runningTotal;
     double runningIncome;
     double runningTaxRate;
-    double workingTotal;
+    int workingTotal;
     double initPayment;
     double finPayment;
     double diffOfPayments;
@@ -33,7 +33,7 @@ public class TaxCalc {
         //this.Calculation(forgiven);
     }
 
-    public double Calculation (double forgivenAndIncome)
+    public int Calculation (int forgivenAndIncome)
     {
 
         runningTotal=forgivenAndIncome;

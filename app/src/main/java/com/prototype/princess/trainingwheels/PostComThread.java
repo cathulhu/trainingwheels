@@ -205,18 +205,8 @@ public class PostComThread implements Runnable {
                 int sumInterest = individualPlan.getInt("totalInterestPaid");
                 int sumTotal = individualPlan.getInt("totalAmountPaid");
                 //later I might want to see if I need to use the includesExtended, has BothLoanTypes, and hasConsolLoansOnly bools from post Response.
-               // FragTabCalc.serverResponce = FragTabCalc.serverResponce + ("Repayment Type: " + plantype + "\nLoan Period (Months): " + loanTime + "\nInitial Payment Amount: $" + initPayment + "\nFinal Payment Amount: $" + finPayment + "\nAmount Forgiven: $" + forgiven + "\nTotal Interest Payed: $" + sumInterest + "\nTotal Sum Payed: $" + sumTotal + "\n\n");
 
                 RepayPlan aPlan = new RepayPlan(plantype, loanTime, initPayment, finPayment, forgiven, sumInterest, sumTotal);
-
-                    FragTabAnalysis.cost[i]=sumTotal-sumInterest;
-                    FragTabAnalysis.interest[i]=sumInterest;
-                    if (forgiven >= 50)
-                    {
-
-                        TaxCalc newTaxcalc = new TaxCalc();
-                        FragTabAnalysis.tax[i]= newTaxcalc.Calculation((double)forgiven);
-                    }
 
             }
 

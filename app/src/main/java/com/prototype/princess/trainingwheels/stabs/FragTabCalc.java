@@ -62,6 +62,8 @@ public class FragTabCalc extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        super.onActivityCreated(savedInstanceState);                                //will these maybe solve the problem of the results not appearing until I leave and come back to page? nope.
         final View view = inflater.inflate(R.layout.tab2calc, container, false);
         Button postButton = (Button) view.findViewById(R.id.postButton);
        // TextView response = (TextView) view.findViewById(R.id.respText);
@@ -86,7 +88,7 @@ public class FragTabCalc extends ListFragment {
             }
         });
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, RepayPlan.GetList());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, RepayPlan.GetListasString());
         setListAdapter(adapter);
         adapter.notifyDataSetChanged();
 

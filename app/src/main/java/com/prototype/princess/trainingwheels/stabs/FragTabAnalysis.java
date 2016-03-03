@@ -26,6 +26,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.prototype.princess.trainingwheels.AsyncRequest;
 import com.prototype.princess.trainingwheels.PostComThread;
 import com.prototype.princess.trainingwheels.R;
+import com.prototype.princess.trainingwheels.RepayPlan;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,9 +38,6 @@ import java.util.List;
 
 public class FragTabAnalysis extends Fragment{
 
-    static public int[] cost = new int[11];
-    static public int[] interest = new int[11];
-    static public double[] tax = new double[11];
     static public int[] colors = {92,16,220};
 
 
@@ -54,14 +52,15 @@ public class FragTabAnalysis extends Fragment{
 //        yvals.add(new BarEntry(9, 0));              //2. Add y values (value, index) to list
 //        yvals.add(new BarEntry(20, 1));
 
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                float[] eachbar = {cost[i], interest[i], (float)tax[i] };
-                yvals.add(new BarEntry(eachbar, i));
-            }
-        }
 
+        int i=0;
+        for(RepayPlan plan : RepayPlan.GetList())
+        {
+            float[] eachbar = {plan.principal, plan.sumInterest, plan.taxes };
+            yvals.add(new BarEntry(eachbar, i));
+            i++;
+        }
+        
         List<String> xvals = new ArrayList<String>();   //3. make x value labels
         xvals.add("Standard 10 Year");
         xvals.add("Graduated 10 Year");

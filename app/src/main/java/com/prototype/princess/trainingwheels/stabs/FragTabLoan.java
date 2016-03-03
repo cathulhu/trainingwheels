@@ -99,7 +99,8 @@ public class FragTabLoan extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         View view = inflater.inflate(R.layout.tab1loan, container, false);
 
-
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, loanSummary);
+        setListAdapter(adapter);
 
         Button loanSelectbutton = (Button) view.findViewById(R.id.loanSelectbutton);
         loanSelectbutton.setOnClickListener(new View.OnClickListener() {
@@ -152,8 +153,8 @@ public class FragTabLoan extends ListFragment {
                     String loanListEntry = "Loan #" + loanCounter + " $" + debtValue + " @ %" + aprValue + "\n" + lastloantype;
                     loanSummary.add(loanCounter, loanListEntry);
 
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, loanSummary);
-                    setListAdapter(adapter);
+//                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, loanSummary);
+//                    setListAdapter(adapter);
                     adapter.notifyDataSetChanged();
 
                     loanCounter++;
