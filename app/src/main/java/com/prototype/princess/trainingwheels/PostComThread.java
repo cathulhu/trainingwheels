@@ -195,18 +195,19 @@ public class PostComThread implements Runnable {
 
             for (int i = 0; repayPlans.getJSONObject(i) != null; i++) {
 
-                JSONObject individualPlans = repayPlans.getJSONObject(i);
+                JSONObject individualPlan = repayPlans.getJSONObject(i);
 
-                String plantype = individualPlans.getString("repaymentPlan");
-                int loanTime = individualPlans.getInt("loanPeriod");
-                int initPayment = individualPlans.getInt("initialMonthlyPayment");
-                int finPayment = individualPlans.getInt("finalMonthlyPayment");
-                float forgiven = individualPlans.getInt("amountForgiven");
-                int sumInterest = individualPlans.getInt("totalInterestPaid");
-                int sumTotal = individualPlans.getInt("totalAmountPaid");
+                String plantype = individualPlan.getString("repaymentPlan");
+                int loanTime = individualPlan.getInt("loanPeriod");
+                int initPayment = individualPlan.getInt("initialMonthlyPayment");
+                int finPayment = individualPlan.getInt("finalMonthlyPayment");
+                int forgiven = individualPlan.getInt("amountForgiven");
+                int sumInterest = individualPlan.getInt("totalInterestPaid");
+                int sumTotal = individualPlan.getInt("totalAmountPaid");
                 //later I might want to see if I need to use the includesExtended, has BothLoanTypes, and hasConsolLoansOnly bools from post Response.
-                FragTabCalc.serverResponce = FragTabCalc.serverResponce + ("Repayment Type: " + plantype + "\nLoan Period (Months): " + loanTime + "\nInitial Payment Amount: $" + initPayment + "\nFinal Payment Amount: $" + finPayment + "\nAmount Forgiven: $" + forgiven + "\nTotal Interest Payed: $" + sumInterest + "\nTotal Sum Payed: $" + sumTotal + "\n\n");
+               // FragTabCalc.serverResponce = FragTabCalc.serverResponce + ("Repayment Type: " + plantype + "\nLoan Period (Months): " + loanTime + "\nInitial Payment Amount: $" + initPayment + "\nFinal Payment Amount: $" + finPayment + "\nAmount Forgiven: $" + forgiven + "\nTotal Interest Payed: $" + sumInterest + "\nTotal Sum Payed: $" + sumTotal + "\n\n");
 
+                RepayPlan aPlan = new RepayPlan(plantype, loanTime, initPayment, finPayment, forgiven, sumInterest, sumTotal);
 
                     FragTabAnalysis.cost[i]=sumTotal-sumInterest;
                     FragTabAnalysis.interest[i]=sumInterest;
