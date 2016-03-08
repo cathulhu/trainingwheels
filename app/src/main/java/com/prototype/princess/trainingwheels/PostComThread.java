@@ -1,20 +1,8 @@
 package com.prototype.princess.trainingwheels;
 
 
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.view.LayoutInflater;
 
-import com.prototype.princess.trainingwheels.stabs.FragTabAnalysis;
 import com.prototype.princess.trainingwheels.stabs.FragTabCalc;
 import com.prototype.princess.trainingwheels.stabs.FragTabInfo;
 import com.prototype.princess.trainingwheels.stabs.FragTabLoan;
@@ -29,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class PostComThread implements Runnable {
 

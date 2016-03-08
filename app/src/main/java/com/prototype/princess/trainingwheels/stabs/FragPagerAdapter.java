@@ -5,9 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.prototype.princess.trainingwheels.graphs.FragTotalGraph;
+
 public class FragPagerAdapter extends FragmentPagerAdapter {
 
-    String[] tabtitles = {"Tax Info", "Loan Info", "Result", "Analysis"};
+    String[] tabtitles = {"Tax Info", "Loan Info", "Result", "Graphing", "Interpolation"};
 
     private Context context;
 
@@ -26,14 +28,16 @@ public class FragPagerAdapter extends FragmentPagerAdapter {
         } else if (position == 2) {
             return new FragTabCalc();
         } else if (position == 3) {
-            return new FragTabAnalysis();
+            return new FragTotalGraph();
+        } else  if (position == 4) {
+            return new FragTabInterpolation();
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return 5;
     }
 
     @Override

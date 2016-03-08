@@ -1,21 +1,12 @@
-package com.prototype.princess.trainingwheels.stabs;
+package com.prototype.princess.trainingwheels.graphs;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -23,27 +14,22 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.prototype.princess.trainingwheels.AsyncRequest;
-import com.prototype.princess.trainingwheels.PostComThread;
 import com.prototype.princess.trainingwheels.R;
 import com.prototype.princess.trainingwheels.RepayPlan;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 
-public class FragTabAnalysis extends Fragment{
+public class FragTotalGraph extends Fragment{
 
     static public int[] colors = {92,16,220};
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.tab3anal, container, false);
+        final View view = inflater.inflate(R.layout.tab3graph, container, false);
 
         BarChart chart = (BarChart) view.findViewById(R.id.chart);
 
@@ -60,7 +46,7 @@ public class FragTabAnalysis extends Fragment{
             yvals.add(new BarEntry(eachbar, i));
             i++;
         }
-        
+
         List<String> xvals = new ArrayList<String>();   //3. make x value labels
         xvals.add("Standard 10 Year");
         xvals.add("Graduated 10 Year");

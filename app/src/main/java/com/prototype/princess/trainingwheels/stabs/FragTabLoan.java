@@ -27,8 +27,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.prototype.princess.trainingwheels.PaymentCalc;
 import com.prototype.princess.trainingwheels.R;
 import com.prototype.princess.trainingwheels.AsyncRequest;
+import com.prototype.princess.trainingwheels.RepayPlan;
 
 import java.util.ArrayList;
 
@@ -142,6 +144,9 @@ public class FragTabLoan extends ListFragment {
 
                     EditText aprInput = (EditText) v.getRootView().findViewById(R.id.aprInput);
                     String aprValue = aprInput.getText().toString();
+
+
+                    PaymentCalc.dumbTotalLoan += Integer.parseInt(debtValue);       //tabulates total loan value in dumb way for local IBR & payment calculations
 
 
                     loanArray[arrayCount] = debtValue;
