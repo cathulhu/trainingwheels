@@ -178,7 +178,7 @@ public class PostComThread implements Runnable {
             JSONObject parsedResponce = new JSONObject(unDecodedresp);
             JSONArray repayPlans = parsedResponce.getJSONArray("repaymentPlanTypes");
 
-            Log.v("server responce is: ", parsedResponce.toString());
+            Log.v("server response is: ", parsedResponce.toString());
 
             for (int i = 0; repayPlans.getJSONObject(i) != null; i++) {
 

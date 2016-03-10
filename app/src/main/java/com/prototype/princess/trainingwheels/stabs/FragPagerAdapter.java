@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.prototype.princess.trainingwheels.graphs.FragMonthlyGraph;
 import com.prototype.princess.trainingwheels.graphs.FragTotalGraph;
 
 public class FragPagerAdapter extends FragmentPagerAdapter {
@@ -30,7 +31,7 @@ public class FragPagerAdapter extends FragmentPagerAdapter {
         } else if (position == 3) {
             return new FragTotalGraph();
         } else  if (position == 4) {
-            return new FragTabInterpolation();
+            return new FragMonthlyGraph();
         }
         return null;
     }

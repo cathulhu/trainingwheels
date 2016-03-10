@@ -36,15 +36,10 @@ public class RepayPlan {
         allPlans.add(this);
     }
 
-//    public static List<String> GetPlanNames()
-//    {
-//        List<String> names = new ArrayList<>();
-//
-//        for(RepayPlan plan : allPlans){
-//            names.add(plan.plantype);
-//        }
-//        return names;
-//    }
+    public static List<RepayPlan> GetAllPlans()
+    {
+        return allPlans;
+    }
 
     public static List<String> GetListasString()
     {

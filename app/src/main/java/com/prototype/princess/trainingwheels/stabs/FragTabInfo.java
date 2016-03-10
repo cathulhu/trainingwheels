@@ -15,7 +15,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.prototype.princess.trainingwheels.R;
-import com.prototype.princess.trainingwheels.AsyncRequest;
+
 
 public class FragTabInfo extends Fragment {
 

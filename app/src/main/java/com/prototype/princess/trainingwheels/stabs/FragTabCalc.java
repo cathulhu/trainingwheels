@@ -41,11 +41,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.prototype.princess.trainingwheels.R;
-import com.prototype.princess.trainingwheels.AsyncRequest;
+
 
 import java.util.ArrayList;
-
-import com.prototype.princess.trainingwheels.AsyncRequest;
 import com.prototype.princess.trainingwheels.PostComThread;
 import com.prototype.princess.trainingwheels.R;
 import com.prototype.princess.trainingwheels.RepayPlan;

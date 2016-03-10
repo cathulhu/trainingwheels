@@ -2,6 +2,8 @@ package com.prototype.princess.trainingwheels;
 
 import android.support.v4.app.Fragment;
 
+import com.prototype.princess.trainingwheels.stabs.FragTabInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,15 +38,15 @@ public class PaymentCalc extends Fragment {
     public static int dumbTotalLoan;       //just adds up total of all loans with no type checking for now
     int familysize=0; //take this from loaninfo screen eventually
     int[] povertylevels = {11770};
-    double AGI=20000; //take this from loaninfo screen (right now im just getting gross income, later implement actual AGI via gross minus deductions.
-    double interestRateMonthly = (0.06)/12;     //fixed at 6 percent right now
+    double AGI=Double.parseDouble(FragTabInfo.incomeValue); //geting income from info screen, later should get for object oriented
+    static double interestRateMonthly = (0.06)/12;     //fixed at 6 percent right now
     int numberMonths= 120; //fixed at 120 months for now
 
     int income;
     int interestTotal;
-    double runningTotal;
+    static double runningTotal;
     double workingTotal;
-    double fixedPayment;
+    static double fixedPayment;
 
     static double finHardshipLine;
     double IBpaymentAnnual;
@@ -60,16 +62,19 @@ public class PaymentCalc extends Fragment {
     public PaymentCalc()
     {
         finHardshipLine=povertylevels[familysize]*1.5;
+
+        for(Loan loan : Loan.getAllLoans())
+        {
+            runningTotal+=loan.principal;
+        }
         //code here will determine which IBR plans actually eligible for
     }
 
-    public double stdPayments (int numberMonths)
+    public static double stdPayments (int numberMonths)
     {
         // (rate*presentTotal) / (1- (1+rate)^-#months )
 
-        dumbTotalLoan = 43000;
-        runningTotal = dumbTotalLoan;
-        double extendedFixed;
+//        runningTotal = dumbTotalLoan;
 
         fixedPayment = ( (interestRateMonthly)*runningTotal ) / ( 1- Math.pow( (1+interestRateMonthly), -numberMonths ) );
 
@@ -77,9 +82,31 @@ public class PaymentCalc extends Fragment {
 
     }
 
-    public List<Double> IBR ()
+    public static List<Float> stdPaymentsList (int numberMonths)
     {
-        List<Double> IBRepayeResults = new ArrayList<>();
+        List<Float> stdpayments = new ArrayList<>();
+        Float payment = (float) stdPayments(numberMonths);
+
+        for (int i = 0; i <= numberMonths ; i++)
+        {
+            stdpayments.add(payment);
+        }
+
+        return stdpayments;
+    }
+
+
+
+//    public static List<Float> gradPaymentList ()
+//    {
+//
+//    }
+
+
+
+    public List<Float> IBR ()
+    {
+        List<Float> IBRepayeResults = new ArrayList<>();
         IBpaymentAnnual = (AGI-finHardshipLine);
 
         repayeAnnual = IBpaymentAnnual*0.10;
@@ -87,27 +114,31 @@ public class PaymentCalc extends Fragment {
         IBRnewAnnual= IBpaymentAnnual *0.10;
         IBRoldAnnual = IBpaymentAnnual *0.15;
 
-        IBRepayeResults.add(repayeAnnual/12);
-        IBRepayeResults.add(payeAnnual/12);
-        IBRepayeResults.add(IBRnewAnnual/12);
-        IBRepayeResults.add(IBRoldAnnual/12);
+        IBRepayeResults.add((float)repayeAnnual/12);
+        IBRepayeResults.add((float)payeAnnual/12);
+        IBRepayeResults.add((float)IBRnewAnnual/12);
+        IBRepayeResults.add((float)IBRoldAnnual/12);
 
         return IBRepayeResults;
     }
 
-    public List<Double> ICR ()
+
+
+    public List<Float> ICR ()
     {
-        List<Double> ICRepayeResults = new ArrayList<>();
+        List<Float> ICRepayeResults = new ArrayList<>();
         ICpaymentAnnual = (AGI-povertylevels[0]);   //note that for ICR discretionary income is just AGI-poverty level, no %150 here.
         ICRAnnual = ICpaymentAnnual * 0.2;
 
-        double ICRfixed12 = this.stdPayments(144)*0.7273;   //ICR adjustment of 12 year fixed payment times 20000 ICR table adjustment
+        double ICRfixed12 = this.stdPayments(144)*0.7273 ;   //ICR adjustment of 12 year fixed payment times 20000 ICR table adjustment
+        float ICRfixed12float = (float) ICRfixed12;
 
-        ICRepayeResults.add(ICRAnnual/12);
-        ICRepayeResults.add(ICRfixed12);
+        ICRepayeResults.add( (float)ICRAnnual/12 );
+        ICRepayeResults.add( (float)ICRfixed12float );
 
         return ICRepayeResults;
     }
+
 
 
 }
