@@ -65,7 +65,7 @@ public class PaymentCalc extends Fragment {
 
         for(Loan loan : Loan.getAllLoans())
         {
-            runningTotal+=loan.principal;
+            runningTotal=loan.principal;
         }
         //code here will determine which IBR plans actually eligible for
     }
