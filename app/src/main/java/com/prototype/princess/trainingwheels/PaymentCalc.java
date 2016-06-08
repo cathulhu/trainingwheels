@@ -76,8 +76,15 @@ public class PaymentCalc extends Fragment {
 
 //        runningTotal = dumbTotalLoan;
 
-        fixedPayment = ( (interestRateMonthly)*runningTotal ) / ( 1- Math.pow( (1+interestRateMonthly), -numberMonths ) );
-
+        if (numberMonths==300 && runningTotal < 30000 )
+        {
+            fixedPayment = 0;
+        }
+        else
+        {
+            fixedPayment = ( (interestRateMonthly)*runningTotal ) / ( 1- Math.pow( (1+interestRateMonthly), -numberMonths ) );
+        }
+        
         return  fixedPayment;
 
     }
